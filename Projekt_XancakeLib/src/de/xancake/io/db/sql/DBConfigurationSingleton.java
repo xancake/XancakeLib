@@ -1,4 +1,4 @@
-package de.xancake.io.db;
+package de.xancake.io.db.sql;
 
 import java.io.IOException;
 
