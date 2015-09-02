@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.xancake.io.db.util.DatabaseUtils;
 import de.xancake.localization.LocalizationException;
 
 public class DatabaseSource implements LocalizationSource_I {
@@ -73,23 +72,15 @@ public class DatabaseSource implements LocalizationSource_I {
 	}
 	
 	private String queryValue(String key) throws SQLException {
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		try {
-			String select = MessageFormat.format(SELECT_LOCALIZATION_VALUE, myDBTableName, myDBKeyName, myDBValueName);
-			stmt = myConnection.prepareStatement(select);
+		String select = MessageFormat.format(SELECT_LOCALIZATION_VALUE, myDBTableName, myDBKeyName, myDBValueName);
+		try(PreparedStatement stmt = myConnection.prepareStatement(select)) {
 			stmt.setString(1, key);
-			rs = stmt.executeQuery();
-			if(rs.next()) {
-				return rs.getString(myDBValueName);
-			} else {
-				return null;
-			}
-		} finally {
-			try {
-				DatabaseUtils.close(stmt, rs);
-			} catch(SQLException e) {
-				e.printStackTrace();
+			try(ResultSet rs = stmt.executeQuery()) {
+				if(rs.next()) {
+					return rs.getString(myDBValueName);
+				} else {
+					return null;
+				}
 			}
 		}
 	}

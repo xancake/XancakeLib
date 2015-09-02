@@ -8,16 +8,16 @@ public class CollectionAssert {
 	private CollectionAssert() {}
 	
 	public static <T> void assertContainsOnly(Set<T> expected, Set<T> actual) {
-		assertEquals("Die Menge der tats‰chlichen Elemente weicht von den erwarteten Elementen ab.", expected.size(), actual.size());
+		assertEquals("Die Menge der tats√§chlichen Elemente weicht von den erwarteten Elementen ab.", expected.size(), actual.size());
 		for(T element : expected) {
 			assertTrue("Ein erwartetes Element ist nicht vorhanden.", actual.contains(element));
 		}
 	}
 	
 	public static <T> void assertListEquals(List<T> expected, List<T> actual) {
-		assertEquals("Die Menge der tats‰chlichen Elemente weicht von den erwarteten Elementen ab.", expected.size(), actual.size());
+		assertEquals("Die Menge der tats√§chlichen Elemente weicht von den erwarteten Elementen ab.", expected.size(), actual.size());
 		for(int i=0; i<expected.size(); i++) {
-			assertEquals("Das tats‰chliche Element am Index " + i + " entspricht nicht dem erwarteten Element.", expected.get(i), actual.get(i));
+			assertEquals("Das tats√§chliche Element am Index " + i + " entspricht nicht dem erwarteten Element.", expected.get(i), actual.get(i));
 		}
 	}
 }

@@ -38,7 +38,7 @@ public class JDropDownButtonDemo extends SwingDemonstrator {
 		}
 		UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		
-		String[] values = new String[] {"Hallo", "Lars", "Welt", ":D", "Maus", "Tastatur", "Monitor", "Wand", "Haus", "Universität", "Ich bin ein ganz langer Text der blöd zu lesen ist!"};
+		String[] values = new String[] {"Hallo", "Lars", "Welt", ":D", "Maus", "Tastatur", "Monitor", "Wand", "Haus", "UniversitÃ¤t", "Ich bin ein ganz langer Text der blÃ¶d zu lesen ist!"};
 		
 		ActionListener listener = new ActionListener() {
 			@Override

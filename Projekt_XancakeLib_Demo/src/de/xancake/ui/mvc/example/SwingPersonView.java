@@ -37,7 +37,7 @@ public class SwingPersonView extends View_A<PersonModel, PersonViewListener_I> i
 		myIdentField = new JSpinner(new SpinnerNumberModel(1000, 0, Integer.MAX_VALUE, 1));
 		myVornameField = new JTextField();
 		myNachnameField = new JTextField();
-		myRandomButton = new JButton("Zuf‰llig belegen");
+		myRandomButton = new JButton("Zuf√§llig belegen");
 	}
 	
 	private void initListeners() {
