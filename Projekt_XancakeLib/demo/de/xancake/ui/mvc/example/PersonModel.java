@@ -1,8 +1,6 @@
 package de.xancake.ui.mvc.example;
 
-import de.xancake.ui.mvc.Model_I;
-
-public class PersonModel implements Model_I {
+public class PersonModel {
 	private int myIdent;
 	private String myVorname;
 	private String myNachname;

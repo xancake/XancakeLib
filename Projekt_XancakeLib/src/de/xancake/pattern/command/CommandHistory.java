@@ -52,16 +52,18 @@ public class CommandHistory {
 	public void invoke(Command_I command) {
 		if(command instanceof UndoableCommand_I) {
 			if(canRedo()) {
+				// Wenn wir redo'n können, sind wir nicht am Ende der Command-Liste.
+				// Folglich werden die folgenden Commands (ursprüngliche Redos) überschrieben.
+				// Damit das nicht zu Problemen führt werden die Redos von vornherein gelöscht.
 				clearRedos();
 			}
 			myCommands.add((UndoableCommand_I)command);
 			myCurrentCommandIndex++;
-			command.execute();
-			myEventExecutor.fireInvokeEvent(command);
 		} else {
 			clearHistory();
-			command.execute();
 		}
+		command.execute();
+		myEventExecutor.fireInvokeEvent(command);
 	}
 	
 	public boolean isEmpty() {

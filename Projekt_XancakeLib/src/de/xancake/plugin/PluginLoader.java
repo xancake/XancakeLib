@@ -12,7 +12,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import de.xancake.io.file.filter.FileExtensionFilter;
 
-public class PluginLoader {
+class PluginLoader {
 	@SuppressWarnings("unchecked")
   public static <M extends PluginManager_I> List<Plugin_I<M>> loadPlugins(M pluginManager, File pluginDir) throws IOException {
 		File[] pluginJars = pluginDir.listFiles(new FileExtensionFilter("jar"));
@@ -72,7 +72,7 @@ public class PluginLoader {
 	
 	private static <M extends PluginManager_I> List<Plugin_I<M>> createPluggableObjects(List<Class<Plugin_I<M>>> plugables) {
 		List<Plugin_I<M>> plugins = new ArrayList<Plugin_I<M>>(plugables.size());
-		for (Class<Plugin_I<M>> pluginClass : plugables) {
+		for(Class<Plugin_I<M>> pluginClass : plugables) {
 			try {
 				plugins.add(pluginClass.newInstance());
 			} catch (InstantiationException e) {

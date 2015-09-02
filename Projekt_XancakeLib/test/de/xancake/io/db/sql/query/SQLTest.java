@@ -3,13 +3,13 @@ package de.xancake.io.db.sql.query;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
 import de.xancake.io.db.sql.query.impl.JoinType;
 import de.xancake.io.db.sql.query.impl.SQL;
 
 @RunWith(JUnit4.class)
 public class SQLTest {
-	public static void main(String... args) {
+	@SuppressWarnings("deprecation")
+  public static void main(String... args) {
 		System.out.println(SQL.select());
 		System.out.println(SQL.select().from("test"));
 		System.out.println(SQL.select().from("test", "t"));

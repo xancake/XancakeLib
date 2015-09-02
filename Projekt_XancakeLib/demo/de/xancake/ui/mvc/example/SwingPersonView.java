@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,11 +14,10 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import de.xancake.ui.mvc.View_A;
 import de.xancake.ui.mvc.window.WindowView_I;
 
-public class PersonView extends View_A<PersonModel, PersonViewListener_I> implements WindowView_I<PersonModel, PersonViewListener_I> {
+public class SwingPersonView extends View_A<PersonModel, PersonViewListener_I> implements WindowView_I<PersonModel, PersonViewListener_I> {
 	private JFrame myFrame;
 	private JPanel myContent;
 	private JSpinner myIdentField;
@@ -27,7 +25,7 @@ public class PersonView extends View_A<PersonModel, PersonViewListener_I> implem
 	private JTextField myNachnameField;
 	private JButton myRandomButton;
 	
-	public PersonView() {
+	public SwingPersonView() {
 		initComponents();
 		initListeners();
 		initLayout();
@@ -39,7 +37,7 @@ public class PersonView extends View_A<PersonModel, PersonViewListener_I> implem
 		myIdentField = new JSpinner(new SpinnerNumberModel(1000, 0, Integer.MAX_VALUE, 1));
 		myVornameField = new JTextField();
 		myNachnameField = new JTextField();
-		myRandomButton = new JButton("Zuf√§llig belegen");
+		myRandomButton = new JButton("Zuf‰llig belegen");
 	}
 	
 	private void initListeners() {

@@ -1,9 +1,9 @@
 package de.xancake.pattern.command.event;
 
 import de.xancake.pattern.command.Command_I;
-import de.xancake.pattern.listener.EventExecutor_A;
+import de.xancake.pattern.listener.EventExecutor;
 
-public class CommandHistoryEventExecutor extends EventExecutor_A<CommandHistoryListener_I> {
+public class CommandHistoryEventExecutor extends EventExecutor<CommandHistoryListener_I> {
 	public void fireInvokeEvent(Command_I command) {
 		fireEvent(new InvokeEvent(command));
 	}
