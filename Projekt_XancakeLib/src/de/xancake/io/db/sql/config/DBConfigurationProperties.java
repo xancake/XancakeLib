@@ -62,37 +62,21 @@ public class DBConfigurationProperties implements DBConfiguration_I {
 		Class.forName(getDriver());
 	}
 	
-	/**
-	 * Gibt den Treibernamen für die Datenbank zurück.
-	 * @return Der Treibername für die Datenbank
-	 */
 	@Override
 	public String getDriver() {
 		return myProperties.getProperty(DB_DRIVER);
 	}
 	
-	/**
-	 * Gibt den Host / Connection-String für die Datenbank zurück.
-	 * @return Der Host / Connection-String für die Datenbank
-	 */
 	@Override
 	public String getHost() {
 		return myProperties.getProperty(DB_HOST);
 	}
 	
-	/**
-	 * Gibt den Benutzernamen für die Datenbank zurück.
-	 * @return Der Benutzername für die Datenbank
-	 */
 	@Override
 	public String getUser() {
 		return myProperties.getProperty(DB_USER);
 	}
 	
-	/**
-	 * Gibt das Passwort für die Datenbank zurück.
-	 * @return Das Passwort für die Datenbank
-	 */
 	@Override
 	public String getPassword() {
 		return myProperties.getProperty(DB_PASS);
