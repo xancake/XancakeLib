@@ -1,8 +1,8 @@
 package de.xancake.persistence.bind.produkt;
 
-import java.io.IOException;
-import de.xancake.io.db.sql.DBConfiguration;
-import de.xancake.io.db.sql.DBConfigurationSingleton;
+import java.math.BigDecimal;
+import de.xancake.io.db.sql.config.DBConfigurationSingleton;
+import de.xancake.io.db.sql.config.DBConfiguration_I;
 import de.xancake.persistence.Creator_I;
 import de.xancake.persistence.Loader_I;
 import de.xancake.persistence.PersistenceBroker_I;
@@ -11,11 +11,11 @@ import de.xancake.persistence.bind.AttributeBinding;
 import de.xancake.persistence.db.sql.DBPersistenceBroker;
 
 public class ProduktDemo {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		Produkt produkt = new Produkt();
 		produkt.setNummer("P-238811-TX");
 		produkt.setBezeichnung("Computer-Maus");
-		produkt.setPreis(2500);
+		produkt.setPreis(new BigDecimal(2500));
 		
 		
 		
@@ -28,28 +28,22 @@ public class ProduktDemo {
 		
 		
 		
-		DBConfiguration configuration = DBConfigurationSingleton.getInstance().getConfiguration();
+		DBConfiguration_I configuration = DBConfigurationSingleton.getInstance().getConfiguration();
 		PersistenceBroker_I broker = new DBPersistenceBroker(configuration);
 		
 		Creator_I<Produkt> produktCreator = broker.creator(produktBinding);
-//		produktCreator.createPersistable();
-		
-		
+		produktCreator.createPersistable();
 		
 		Storer_I<Produkt> produktStorer = broker.storer(produktBinding);
-//		produktStorer.store(produkt);
-		
+		produktStorer.store(produkt);
 		int id = produkt.getId();
 		System.out.println("Produkt wurde unter ID '" + id + "' gespeichert!");
 		
-		
 		Loader_I<Produkt> produktLoader = broker.loader(produktBinding);
-//		Produkt produkt2 = produktLoader.load(id);
+		Produkt produkt2 = produktLoader.load(1002);
+		System.out.println("Das Produkt mit der ID '1002' wurde geladen!");
+		System.out.println(produkt2.toString());
 		
-		
-		
-		
-		
-		
+		produktCreator.dropPersistable();
 	}
 }

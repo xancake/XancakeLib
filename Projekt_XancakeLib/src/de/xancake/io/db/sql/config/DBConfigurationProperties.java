@@ -1,4 +1,4 @@
-package de.xancake.io.db.sql;
+package de.xancake.io.db.sql.config;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,10 +6,11 @@ import java.util.Properties;
 
 /**
  * Repräsentiert die Konfiguration der Verbindungsdaten einer Datenbankverbindung.
+ * Arbeitet mit {@link Properties}.
  * 
  * @author Lars 'Xancake' Nielsen
  */
-public class DBConfiguration {
+public class DBConfigurationProperties implements DBConfiguration_I {
 	private static final String DB_DRIVER = "db.driver";
 	private static final String DB_HOST   = "db.host";
 	private static final String DB_USER   = "db.user";
@@ -18,15 +19,27 @@ public class DBConfiguration {
 	private Properties myProperties;
 	
 	/**
-	 * Initialisiert eine Datenbankkonfiguration aus einem {@link InputStream}.
+	 * Initialisiert eine neue Datenbankkonfiguration aus der übergebenen Ressource.
+	 * Die übergebene Ressource muss eine {@link Properties}-Datei sein und sich im Klassenpfad befinden.
+	 * @param ressource Der Name der zu ladenden Ressource
+	 * @throws ClassNotFoundException Wenn die JDBC-Treiberklasse nicht geladen werden konnte
+	 * @throws IOException Wenn ein Fehler beim Lesen der Konfiguration aus dem InputStream auftritt
+	 * @throws IllegalArgumentException Wenn die Ressource nicht gefunden werden konnte
+	 */
+	public DBConfigurationProperties(String ressource) throws ClassNotFoundException, IOException {
+		this(DBConfigurationProperties.class.getClassLoader().getResourceAsStream(ressource));
+	}
+	
+	/**
+	 * Initialisiert eine neue Datenbankkonfiguration aus einem {@link InputStream}.
 	 * Die Daten aus dem InputStream werden entsprechend von {@link Properties}
 	 * verarbeitet und folgen somit den gleichen Formatierungsregeln.
 	 * @param config Der {@link InputStream} zum Lesen der Konfiguration
-	 * @throws IOException Wenn ein Fehler beim Lesen der Konfiguration aus dem InputStream auftritt
 	 * @throws ClassNotFoundException Wenn die JDBC-Treiberklasse nicht geladen werden konnte
+	 * @throws IOException Wenn ein Fehler beim Lesen der Konfiguration aus dem InputStream auftritt
 	 * @throws IllegalArgumentException Wenn der übergebene InputStream {@code null} ist
 	 */
-	public DBConfiguration(InputStream config) throws IOException, ClassNotFoundException {
+	public DBConfigurationProperties(InputStream config) throws ClassNotFoundException, IOException {
 		if(config == null) {
 			throw new IllegalArgumentException("Die Datenbank-Konfigurations-Datei konnte nicht gefunden werden");
 		}
@@ -38,9 +51,22 @@ public class DBConfiguration {
 	}
 	
 	/**
+	 * Initialisiert eine neue Datenbankkonfiguration aus einer {@link Properties} und übernimmt die Konfiguration.
+	 * @param properties Die Properties
+	 * @throws ClassNotFoundException Wenn die JDBC-Treiberklasse nicht geladen werden konnte
+	 */
+	public DBConfigurationProperties(Properties properties) throws ClassNotFoundException {
+		myProperties = properties;
+		
+		// JDBC-Treiberklasse laden
+		Class.forName(getDriver());
+	}
+	
+	/**
 	 * Gibt den Treibernamen für die Datenbank zurück.
 	 * @return Der Treibername für die Datenbank
 	 */
+	@Override
 	public String getDriver() {
 		return myProperties.getProperty(DB_DRIVER);
 	}
@@ -49,6 +75,7 @@ public class DBConfiguration {
 	 * Gibt den Host / Connection-String für die Datenbank zurück.
 	 * @return Der Host / Connection-String für die Datenbank
 	 */
+	@Override
 	public String getHost() {
 		return myProperties.getProperty(DB_HOST);
 	}
@@ -57,6 +84,7 @@ public class DBConfiguration {
 	 * Gibt den Benutzernamen für die Datenbank zurück.
 	 * @return Der Benutzername für die Datenbank
 	 */
+	@Override
 	public String getUser() {
 		return myProperties.getProperty(DB_USER);
 	}
@@ -65,6 +93,7 @@ public class DBConfiguration {
 	 * Gibt das Passwort für die Datenbank zurück.
 	 * @return Das Passwort für die Datenbank
 	 */
+	@Override
 	public String getPassword() {
 		return myProperties.getProperty(DB_PASS);
 	}

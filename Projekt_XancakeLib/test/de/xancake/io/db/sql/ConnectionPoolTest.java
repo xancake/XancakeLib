@@ -1,23 +1,19 @@
 package de.xancake.io.db.sql;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 import java.sql.Connection;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import de.xancake.io.db.sql.config.DBConfigurationSingleton;
+import de.xancake.io.db.sql.config.DBConfiguration_I;
 
 public class ConnectionPoolTest {
-	private static final String host = "jdbc:oracle:thin:@ham47:1521:divaora";
-	private static final String user = "PROVISION_LN";
-	private static final String pass = "PROVISION_LN_P1S";
-	
 	private ConnectionPool myPool;
 	
 	@Before
 	public void setUp() throws Exception {
-		// TODO: Configuration korrekt laden
-		DBConfiguration configuration = null;
+		DBConfiguration_I configuration = DBConfigurationSingleton.getInstance().getConfiguration();
 		myPool = new ConnectionPool(configuration);
 	}
 	

@@ -1,6 +1,7 @@
 package de.xancake.persistence.db.sql;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Objects;
 import de.xancake.io.db.sql.ConnectionPool;
 import de.xancake.persistence.Creator_I;
@@ -8,7 +9,7 @@ import de.xancake.persistence.bind.AttributeBinding;
 import de.xancake.persistence.bind.TypeBinding_I;
 
 public class DBCreator<T> implements Creator_I<T> {
-	private static final String SQL_CREATE_TABLE    = "CREATE TABLE {0} ({1} PRIMARY KEY ({2}))";
+	private static final String SQL_CREATE_TABLE    = "CREATE TABLE {0} ({1}, PRIMARY KEY ({2}))";
 	private static final String SQL_DROP_TABLE      = "DROP TABLE {0}";
 	private static final String SQL_CREATE_SEQUENCE = "CREATE SEQUENCE {0} START WITH 1000";
 	private static final String SQL_DROP_SEQUENCE   = "DROP SEQUENCE {0}";
@@ -24,14 +25,14 @@ public class DBCreator<T> implements Creator_I<T> {
 	@Override
 	public void createPersistable() throws IOException {
 		String sql = SQL_CREATE_TABLE
-				.replaceFirst("{0}", myBinding.getEntityName())
-				.replaceFirst("{1}", getAttributes(myBinding))
-				.replaceFirst("{2}", myBinding.getIDAttribute().getName());
+				.replace("{0}", myBinding.getEntityName())
+				.replace("{1}", getAttributes(myBinding))
+				.replace("{2}", myBinding.getIDAttribute().getName());
 		
 		try {
 			myConnectionPool.executeStatement(sql, null);
 			createPrimaryKeySequence(myBinding);
-		} catch(InterruptedException e) {
+		} catch(SQLException | InterruptedException e) {
 			throw new IOException("Fehler beim Anlegen der Tabelle '" + myBinding.getEntityName() + "'", e);
 		}
 	}
@@ -39,10 +40,10 @@ public class DBCreator<T> implements Creator_I<T> {
 	private void createPrimaryKeySequence(TypeBinding_I<?> myBinding) throws IOException {
 		String sequence = DBPersistenceUtils.getPrimaryKeySequenceName(myBinding);
 		String sql = SQL_CREATE_SEQUENCE
-				.replaceFirst("{0}", sequence);
+				.replace("{0}", sequence);
 		try {
 			myConnectionPool.executeStatement(sql, null);
-		} catch(InterruptedException e) {
+		} catch(SQLException | InterruptedException e) {
 			throw new IOException("Fehler beim Anlegen der Sequenz '" + sequence + "'", e);
 		}
 	}
@@ -51,11 +52,9 @@ public class DBCreator<T> implements Creator_I<T> {
 		StringBuilder attributes = new StringBuilder();
 		appendAttribute(attributes, myBinding.getIDAttribute());
 		for(AttributeBinding<?> attribute : myBinding.getAttributes()) {
-			appendAttribute(attributes, attribute);
 			attributes.append(", ");
+			appendAttribute(attributes, attribute);
 		}
-		attributes.append("PRIMARY KEY ");
-		attributes.append(myBinding.getIDAttribute().getName());
 		return attributes.toString();
 	}
 	
@@ -71,11 +70,11 @@ public class DBCreator<T> implements Creator_I<T> {
 	@Override
 	public void dropPersistable() throws IOException {
 		String sql = SQL_DROP_TABLE
-				.replaceFirst("{0}", myBinding.getEntityName());
+				.replace("{0}", myBinding.getEntityName());
 		try {
 			myConnectionPool.executeStatement(sql, null);
 			dropPrimaryKeySequence(myBinding);
-		} catch(InterruptedException e) {
+		} catch(SQLException | InterruptedException e) {
 			throw new IOException("Fehler beim L�schen der Tabelle '" + myBinding.getEntityName() + "'", e);
 		}
 	}
@@ -83,10 +82,10 @@ public class DBCreator<T> implements Creator_I<T> {
 	private void dropPrimaryKeySequence(TypeBinding_I<?> myBinding) throws IOException {
 		String sequence = DBPersistenceUtils.getPrimaryKeySequenceName(myBinding);
 		String sql = SQL_DROP_SEQUENCE
-				.replaceFirst("{0}", sequence);
+				.replace("{0}", sequence);
 		try {
 			myConnectionPool.executeStatement(sql, null);
-		} catch(InterruptedException e) {
+		} catch(SQLException | InterruptedException e) {
 			throw new IOException("Fehler beim L�schen der Sequenz '" + sequence + "'", e);
 		}
 	}

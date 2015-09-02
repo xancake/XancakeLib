@@ -1,21 +1,20 @@
 package de.xancake.persistence.bind.produkt;
 
+import java.math.BigDecimal;
+import java.util.Objects;
+
 public class Produkt {
 	private int myIdent;
 	private String myNummer;
 	private String myBezeichnung;
-	private int myPreis;
+	private BigDecimal myPreis;
 	
 	public Produkt() {
 		myIdent = -1;
 	}
 	
-	public int getId() {
+	public Integer getId() {
 		return myIdent;
-	}
-	
-	public void setId(int ident) {
-		myIdent = ident;
 	}
 	
 	public String getNummer() {
@@ -26,19 +25,28 @@ public class Produkt {
 		return myBezeichnung;
 	}
 	
-	public int getPreis() {
+	public BigDecimal getPreis() {
 		return myPreis;
 	}
 	
+	public void setId(Integer ident) {
+		myIdent = Objects.requireNonNull(ident);
+	}
+	
 	public void setNummer(String nummer) {
-		myNummer = nummer;
+		myNummer = Objects.requireNonNull(nummer);
 	}
 	
 	public void setBezeichnung(String bezeichnung) {
-		myBezeichnung = bezeichnung;
+		myBezeichnung = Objects.requireNonNull(bezeichnung);
 	}
 	
-	public void setPreis(int preis) {
-		myPreis = preis;
+	public void setPreis(BigDecimal preis) {
+		myPreis = Objects.requireNonNull(preis);
+	}
+	
+	@Override
+	public String toString() {
+		return "Produkt " + myIdent + " (" + myNummer + ", " + myBezeichnung + ", " + myPreis + ")";
 	}
 }

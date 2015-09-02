@@ -6,13 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Objects;
+import de.xancake.io.db.sql.ConnectionPool;
+import de.xancake.io.db.sql.ConnectionPool.PreparedStatementCallback;
+import de.xancake.io.db.sql.ConnectionPool.ResultSetCallback;
 import de.xancake.persistence.PersistenceBroker_I;
 import de.xancake.persistence.Storer_I;
 import de.xancake.persistence.bind.AttributeBinding;
 import de.xancake.persistence.bind.TypeBinding_I;
-import de.xancake.io.db.sql.ConnectionPool;
-import de.xancake.io.db.sql.ConnectionPool.PreparedStatementCallback;
-import de.xancake.io.db.sql.ConnectionPool.ResultSetCallback;
 
 public class DBStorer<T> implements Storer_I<T> {
 	private static final String SQL_NEW_ID = "SELECT {0}.nextval FROM DUAL";
@@ -40,7 +40,7 @@ public class DBStorer<T> implements Storer_I<T> {
 	private int acquireID() throws IOException {
 		String sequence = DBPersistenceUtils.getPrimaryKeySequenceName(myBinding);
 		String sql = SQL_NEW_ID
-				.replaceFirst("{0}", sequence);
+				.replace("{0}", sequence);
 		
 		ResultSetCallback<Integer> rsCallback = new ResultSetCallback<Integer>() {
 			@Override
@@ -52,16 +52,16 @@ public class DBStorer<T> implements Storer_I<T> {
 		
 		try {
 			return myConnectionPool.executeStatement(sql, rsCallback);
-		} catch(InterruptedException e) {
+		} catch(SQLException | InterruptedException e) {
 			throw new IOException("Fehler beim Ermitteln eines Identen aus der Sequenz '" + sequence + "'", e);
 		}
 	}
 	
 	private void insert(final T object) throws IOException {
 		String sql = SQL_INSERT
-				.replaceFirst("{0}", myBinding.getEntityName())
-				.replaceFirst("{1}", getInsertAttributes())
-				.replaceFirst("{2}", getInsertPlaceholders());
+				.replace("{0}", myBinding.getEntityName())
+				.replace("{1}", getInsertAttributes())
+				.replace("{2}", getInsertPlaceholders());
 		
 		PreparedStatementCallback stmtCallback = new PreparedStatementCallback() {
 			@Override
@@ -76,7 +76,7 @@ public class DBStorer<T> implements Storer_I<T> {
 		
 		try {
 			myConnectionPool.executePreparedStatement(sql, stmtCallback, null);
-		} catch(InterruptedException e) {
+		} catch(SQLException | InterruptedException e) {
 			throw new IOException("Fehler beim Anlegen eines Datensatzes f�r '" + myBinding.getEntityName() + "'", e);
 		}
 	}
@@ -92,7 +92,7 @@ public class DBStorer<T> implements Storer_I<T> {
 	
 	private String getInsertPlaceholders() {
 		StringBuilder placeholders = new StringBuilder("?");
-		for(Iterator<AttributeBinding<?>> iter = myBinding.getAttributes().iterator(); iter.hasNext(); ) {
+		for(Iterator<AttributeBinding<?>> iter = myBinding.getAttributes().iterator(); iter.hasNext(); iter.next()) {
 			placeholders.append(", ?");
 		}
 		return placeholders.toString();
@@ -100,9 +100,9 @@ public class DBStorer<T> implements Storer_I<T> {
 	
 	private void update(final T object) throws IOException {
 		String sql = SQL_UPDATE
-				.replaceFirst("{0}", myBinding.getEntityName())
-				.replaceFirst("{1}", getUpdateSetClause())
-				.replaceFirst("{2}", getUpdateWhereClause());
+				.replace("{0}", myBinding.getEntityName())
+				.replace("{1}", getUpdateSetClause())
+				.replace("{2}", getUpdateWhereClause());
 		
 		PreparedStatementCallback stmtCallback = new PreparedStatementCallback() {
 			@Override
@@ -117,7 +117,7 @@ public class DBStorer<T> implements Storer_I<T> {
 		
 		try {
 			myConnectionPool.executePreparedStatement(sql, stmtCallback, null);
-		} catch(InterruptedException e) {
+		} catch(SQLException | InterruptedException e) {
 			throw new IOException("Fehler beim Aktualisieren eines Datensatzes f�r '" + myBinding.getEntityName() + "'", e);
 		}
 	}

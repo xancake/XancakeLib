@@ -1,7 +1,7 @@
 package de.xancake.persistence.db.sql;
 
 import de.xancake.io.db.sql.ConnectionPool;
-import de.xancake.io.db.sql.DBConfiguration;
+import de.xancake.io.db.sql.config.DBConfiguration_I;
 import de.xancake.persistence.Creator_I;
 import de.xancake.persistence.Loader_I;
 import de.xancake.persistence.PersistenceBroker_I;
@@ -11,11 +11,11 @@ import de.xancake.persistence.bind.TypeBinding_I;
 public class DBPersistenceBroker implements PersistenceBroker_I {
 	private ConnectionPool myConnectionPool;
 	
-	public DBPersistenceBroker(DBConfiguration configuration) {
+	public DBPersistenceBroker(DBConfiguration_I configuration) {
 		myConnectionPool = new ConnectionPool(configuration);
 	}
 	
-	public DBPersistenceBroker(DBConfiguration configuration, int maxConnections) {
+	public DBPersistenceBroker(DBConfiguration_I configuration, int maxConnections) {
 		myConnectionPool = new ConnectionPool(configuration, maxConnections);
 	}
 	

@@ -1,4 +1,4 @@
-package de.xancake.io.db.sql;
+package de.xancake.io.db.sql.config;
 
 import java.io.IOException;
 
@@ -10,21 +10,21 @@ import java.io.IOException;
 public class DBConfigurationSingleton {
 	private static final String DEFAULT_CONFIG = "db.properties";
 	
-	private DBConfiguration myConfiguration;
+	private DBConfiguration_I myConfiguration;
 	
 	private DBConfigurationSingleton() {
 		try {
-			myConfiguration = new DBConfiguration(getClass().getClassLoader().getResourceAsStream(DEFAULT_CONFIG));
+			myConfiguration = new DBConfigurationProperties(getClass().getClassLoader().getResourceAsStream(DEFAULT_CONFIG));
 		} catch (IOException | ClassNotFoundException e) {
 			throw new RuntimeException("Fehler beim Laden der Datenbank-Konfigurations-Datei", e);
 		}
 	}
 	
 	/**
-	 * Gibt die {@link DBConfiguration} des Singletons zurück.
+	 * Gibt die {@link DBConfiguration_I} des Singletons zurück.
 	 * @return Die Datenbank-Konfiguration
 	 */
-	public DBConfiguration getConfiguration() {
+	public DBConfiguration_I getConfiguration() {
 		return myConfiguration;
 	}
 	

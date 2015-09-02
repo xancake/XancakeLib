@@ -26,8 +26,8 @@ public class DBLoader<T> implements Loader_I<T> {
 	@Override
 	public T load(final int id) throws IOException {
 		String sql = SQL_SELECT
-				.replaceFirst("{0}", myBinding.getEntityName())
-				.replaceFirst("{1}", myBinding.getIDAttribute().getName());
+				.replace("{0}", myBinding.getEntityName())
+				.replace("{1}", myBinding.getIDAttribute().getName());
 		
 		PreparedStatementCallback stmtCallback = new PreparedStatementCallback() {
 			@Override
@@ -42,6 +42,7 @@ public class DBLoader<T> implements Loader_I<T> {
 			public T callback(ResultSet rs) throws SQLException {
 				if(rs.next()) {
 					T object = myBinding.create();
+					myBinding.set(object, myBinding.getIDAttribute(), rs.getInt(myBinding.getIDAttribute().getName()));
 					for(AttributeBinding attribute : myBinding.getAttributes()) {
 						myBinding.set(object, attribute, rs.getObject(attribute.getName()));
 					}
@@ -53,7 +54,7 @@ public class DBLoader<T> implements Loader_I<T> {
 		
 		try {
 			return myConnectionPool.executePreparedStatement(sql, stmtCallback, rsCallback);
-		} catch(InterruptedException e) {
+		} catch(SQLException | InterruptedException e) {
 			throw new IOException("Fehler beim Laden eines Datensatzes aus '" + myBinding.getEntityName() + "'", e);
 		}
 	}

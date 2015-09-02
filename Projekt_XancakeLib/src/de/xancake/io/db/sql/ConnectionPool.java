@@ -1,6 +1,5 @@
 package de.xancake.io.db.sql;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,6 +11,7 @@ import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
+import de.xancake.io.db.sql.config.DBConfiguration_I;
 
 /**
  * Ein ConnectionPool verwaltet Datenbankverbindungen an einer zentralen Stelle und stellt sie einheitlich zur Verfügung.
@@ -21,7 +21,7 @@ import java.util.Set;
  * @author Lars 'Xancake' Nielsen
  */
 public class ConnectionPool {
-	private DBConfiguration myDatabaseConfiguration;
+	private DBConfiguration_I myDatabaseConfiguration;
 	private int myMaxConnections;
 	private Queue<Connection> myAvailableConnections;
 	private Set<Connection> myInUseConnections;
@@ -30,19 +30,17 @@ public class ConnectionPool {
 	 * Initialisiert einen neuen ConnectionPool mit den Verbindungsdaten für eine Datenbank.
 	 * @param configuration Die Datenbankkonfiguration
 	 */
-	public ConnectionPool(DBConfiguration configuration) {
+	public ConnectionPool(DBConfiguration_I configuration) {
 		this(configuration, Integer.MAX_VALUE);
 	}
 	
 	/**
 	 * Initialisiert einen neuen ConnectionPool mit den Verbindungsdaten für eine Datenbank und einem Limit für zu
 	 * erzeugende Datenbankverbindungen.
-	 * @param host Der Host / Connection-String für die Datenbank
-	 * @param user Der Benutzername
-	 * @param pass Das Passwort
+	 * @param configuration Die Datenbankkonfiguration
 	 * @param max Die maximal mögliche Anzahl an Verbindungen die der ConnectionPool gleichzeitig verwalten darf
 	 */
-	public ConnectionPool(DBConfiguration configuration, int max) {
+	public ConnectionPool(DBConfiguration_I configuration, int max) {
 		if(max < 1) {
 			throw new IllegalArgumentException("The pool size has to be greater than 0!");
 		}
@@ -59,21 +57,17 @@ public class ConnectionPool {
 	 * insofern die {@link #getConnectionsMax() Kapazität} nicht erreicht ist. Wenn die Kapazität erreicht
 	 * ist, blockiert der Aufruf bis ein anderer Thread eine Connection freigegeben hat.
 	 * @return Eine Connection aus dem Pool
-	 * @throws IOException Wenn ein Fehler beim Erzeugen eine Connection aufgetreten ist
+	 * @throws SQLException Wenn ein Fehler beim Erzeugen eine Connection aufgetreten ist
 	 * @throws InterruptedException Wenn der aufrufende Thread interruted wurde, während er auf die Freigabe einer Connection wartet
 	 */
-	public synchronized Connection acquire() throws IOException, InterruptedException {
+	public synchronized Connection acquire() throws SQLException, InterruptedException {
 		Connection con = null;
 		
 		if(myAvailableConnections.size() > 0) {
 			con = myAvailableConnections.poll();
 		} else {
 			if(myAvailableConnections.size() + myInUseConnections.size() < myMaxConnections) {
-				try {
-					con = DriverManager.getConnection(myDatabaseConfiguration.getHost(), myDatabaseConfiguration.getUser(), myDatabaseConfiguration.getPassword());
-				} catch(SQLException e) {
-					throw new IOException(e);
-				}
+				con = DriverManager.getConnection(myDatabaseConfiguration.getHost(), myDatabaseConfiguration.getUser(), myDatabaseConfiguration.getPassword());
 			} else if(myAvailableConnections.size() + myInUseConnections.size() == myMaxConnections) {
 				while(myAvailableConnections.size() == 0) {
 					wait();
@@ -92,19 +86,15 @@ public class ConnectionPool {
 	 * ausgetragen, aber nicht wieder den verfügbaren Connections hinzugefügt.
 	 * Wenn die Connection nicht als 'in Benutzung' in diesem Pool markiert wurde, passiert nichts.
 	 * @param connection Die freizugebende Connection
-	 * @throws IOException Falls ein Fehler bei der Abfrage auftritt, ob die Connection geschlossen ist
+	 * @throws SQLException Falls ein Fehler bei der Abfrage auftritt, ob die Connection geschlossen ist
 	 */
-	public synchronized void release(Connection connection) throws IOException {
-		try {
-			if(myInUseConnections.remove(connection)) {
-				if(!connection.isClosed()) {
-					// Wenn die Connection vorher in Benutzung war und nicht geschlossen wurde wieder dem Pool hinzuf�gen
-					myAvailableConnections.offer(connection);
-					notifyAll();
-				}
+	public synchronized void release(Connection connection) throws SQLException {
+		if(myInUseConnections.remove(connection)) {
+			if(!connection.isClosed()) {
+				// Wenn die Connection vorher in Benutzung war und nicht geschlossen wurde wieder dem Pool hinzufügen
+				myAvailableConnections.offer(connection);
+				notifyAll();
 			}
-		} catch(SQLException e) {
-			throw new IOException(e);
 		}
 	}
 	
@@ -148,16 +138,12 @@ public class ConnectionPool {
 	 * darum müssen sich die aktuellen Inhaber kümmern.
 	 * <p>Sollen auch die noch verwendeten Verbindungen 'gewalttätig' geschlossen werden,
 	 * empfiehlt sich {@link #closeConnectionsInUse()}.
-	 * @throws IOException Falls ein Fehler beim Schließen der Connections auftritt
+	 * @throws SQLException Falls ein Fehler beim Schließen der Connections auftritt
 	 * @see #closeConnectionsInUse()
 	 */
-	public synchronized void close() throws IOException {
+	public synchronized void close() throws SQLException {
 		while(!myAvailableConnections.isEmpty()) {
-			try {
-				myAvailableConnections.poll().close();
-			} catch(SQLException e) {
-				throw new IOException(e);
-			}
+			myAvailableConnections.poll().close();
 		}
 		myInUseConnections.clear();
 	}
@@ -169,16 +155,12 @@ public class ConnectionPool {
 	 * Inhabern führen wird.
 	 * <p>Zum Schließen der nicht verwendeten (verfügbaren) Connections des Pools empfiehlt sich
 	 * {@link #close()}. 
-	 * @throws IOException Falls ein Fehler beim Schließen der Connections auftritt
+	 * @throws SQLException Falls ein Fehler beim Schließen der Connections auftritt
 	 * @see #close()
 	 */
-	public synchronized void closeConnectionsInUse() throws IOException {
+	public synchronized void closeConnectionsInUse() throws SQLException {
 		for(Connection connection : myInUseConnections) {
-			try {
-				connection.close();
-			} catch(SQLException e) {
-				throw new IOException(e);
-			}
+			connection.close();
 		}
 		myInUseConnections.clear();
 	}
@@ -193,12 +175,12 @@ public class ConnectionPool {
 	 * @param statementCallback Das Callback für das {@link PreparedStatement} zur Konfiguration
 	 * @param resultSetCallback Das Callback zum Auslesen des {@link ResultSet}s
 	 * @return Das Rückgabeobjekt des {@link ResultSetCallback}s
-	 * @throws IOException Wenn ein Fehler beim Ausführen des SQL-Statements auftritt
+	 * @throws SQLException Wenn ein Fehler beim Ausführen des SQL-Statements auftritt
 	 * @throws InterruptedException Wenn der aufrufende Thread beim {@link #acquire() Warten auf eine Verbindung} interrupted wird
 	 * @see PreparedStatementCallback
 	 * @see ResultSetCallback
 	 */
-	public <T> T executePreparedStatement(String sql, PreparedStatementCallback statementCallback, ResultSetCallback<T> resultSetCallback) throws IOException, InterruptedException {
+	public <T> T executePreparedStatement(String sql, PreparedStatementCallback statementCallback, ResultSetCallback<T> resultSetCallback) throws SQLException, InterruptedException {
 		Connection con = acquire();
 		try(PreparedStatement stmt = con.prepareStatement(sql)) {
 			statementCallback.callback(stmt);
@@ -209,8 +191,6 @@ public class ConnectionPool {
 					return null;
 				}
 			}
-		} catch(SQLException e) {
-			throw new IOException(e);
 		} finally {
 			release(con);
 		}
@@ -224,11 +204,11 @@ public class ConnectionPool {
 	 * @param sql Der SQL-Befehl der ausgeführt werden soll
 	 * @param resultSetCallback Das Callback zum Auslesen des {@link ResultSet}s
 	 * @return Das Rückgabeobjekt des {@link ResultSetCallback}s
-	 * @throws IOException Wenn ein Fehler beim Ausführen des SQL-Statements auftritt
+	 * @throws SQLException Wenn ein Fehler beim Ausführen des SQL-Statements auftritt
 	 * @throws InterruptedException Wenn der aufrufende Thread beim {@link #acquire() Warten auf eine Verbindung} interrupted wird
 	 * @see ResultSetCallback
 	 */
-	public <T> T executeStatement(String sql, ResultSetCallback<T> resultSetCallback) throws IOException, InterruptedException {
+	public <T> T executeStatement(String sql, ResultSetCallback<T> resultSetCallback) throws SQLException, InterruptedException {
 		Connection con = acquire();
 		try(Statement stmt = con.createStatement()) {
 			try(ResultSet rs = stmt.executeQuery(sql)) {
@@ -238,8 +218,6 @@ public class ConnectionPool {
 					return null;
 				}
 			}
-		} catch(SQLException e) {
-			throw new IOException(e);
 		} finally {
 			release(con);
 		}
@@ -279,6 +257,5 @@ public class ConnectionPool {
 	@Override
 	protected void finalize() throws Throwable {
 		close();
-		super.finalize();
 	}
 }
