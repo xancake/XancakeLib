@@ -25,22 +25,49 @@ public class ConnectionPool {
 	private int myMaxConnections;
 	private Queue<Connection> myAvailableConnections;
 	private Set<Connection> myInUseConnections;
+	private boolean isAutoCommit;
 	
 	/**
 	 * Initialisiert einen neuen ConnectionPool mit den Verbindungsdaten für eine Datenbank.
+	 * Die Connections werden mit auto-commit erzeugt und das Limit für den ConnectionPool
+	 * liegt bei {@link Integer#MAX_VALUE}.
 	 * @param configuration Die Datenbankkonfiguration
 	 */
 	public ConnectionPool(DBConfiguration_I configuration) {
-		this(configuration, Integer.MAX_VALUE);
+		this(configuration, true, Integer.MAX_VALUE);
 	}
 	
 	/**
-	 * Initialisiert einen neuen ConnectionPool mit den Verbindungsdaten für eine Datenbank und einem Limit für zu
-	 * erzeugende Datenbankverbindungen.
+	 * Initialisiert einen neuen ConnectionPool mit den Verbindungsdaten für eine Datenbank.
+	 * Das Limit für den ConnectionPool liegt bei {@link Integer#MAX_VALUE}.
+	 * @param configuration Die Datenbankkonfiguration
+	 * @param autoCommit Ob die erzeugten Connections mit {@link Connection#setAutoCommit(boolean) auto-commit}
+	 *        erzeugt werden sollen oder nicht
+	 */
+	public ConnectionPool(DBConfiguration_I configuration, boolean autoCommit) {
+		this(configuration, autoCommit, Integer.MAX_VALUE);
+	}
+	
+	/**
+	 * Initialisiert einen neuen ConnectionPool mit den Verbindungsdaten für eine Datenbank.
+	 * Die Connections werden mit auto-commit erzeugt.
 	 * @param configuration Die Datenbankkonfiguration
 	 * @param max Die maximal mögliche Anzahl an Verbindungen die der ConnectionPool gleichzeitig verwalten darf
 	 */
 	public ConnectionPool(DBConfiguration_I configuration, int max) {
+		this(configuration, true, max);
+	}
+	
+	/**
+	 * Initialisiert einen neuen ConnectionPool mit den Verbindungsdaten für eine Datenbank und einem Limit für zu
+	 * erzeugende Datenbankverbindungen. Zusätzlich kann angegeben werden, ob die erzeugten Connections auto-commit
+	 * auf der Datenbank durchführen sollen, oder nicht.
+	 * @param configuration Die Datenbankkonfiguration
+	 * @param autoCommit Ob die erzeugten Connections mit {@link Connection#setAutoCommit(boolean) auto-commit}
+	 *        erzeugt werden sollen oder nicht
+	 * @param max Die maximal mögliche Anzahl an Verbindungen die der ConnectionPool gleichzeitig verwalten darf
+	 */
+	public ConnectionPool(DBConfiguration_I configuration, boolean autoCommit, int max) {
 		if(max < 1) {
 			throw new IllegalArgumentException("The pool size has to be greater than 0!");
 		}
@@ -48,6 +75,7 @@ public class ConnectionPool {
 		myMaxConnections = max;
 		myAvailableConnections = new LinkedList<>();
 		myInUseConnections = new HashSet<>();
+		isAutoCommit = autoCommit;
 	}
 	
 	/**
@@ -68,6 +96,7 @@ public class ConnectionPool {
 		} else {
 			if(myAvailableConnections.size() + myInUseConnections.size() < myMaxConnections) {
 				con = DriverManager.getConnection(myDatabaseConfiguration.getHost(), myDatabaseConfiguration.getUser(), myDatabaseConfiguration.getPassword());
+				con.setAutoCommit(isAutoCommit);
 			} else if(myAvailableConnections.size() + myInUseConnections.size() == myMaxConnections) {
 				while(myAvailableConnections.size() == 0) {
 					wait();
@@ -133,6 +162,19 @@ public class ConnectionPool {
 	}
 	
 	/**
+	 * Gibt zurück, ob dieser ConnectionPool für auto-commit konfiguriert wurde.
+	 * Das heißt, dass die Connections, die der Pool erzeugt für {@link Connection#setAutoCommit(boolean) auto-commit}
+	 * konfiguriert sind. Deshalb muss darauf geachtet werden, manuell zu {@link Connection#commit() committen}
+	 * oder {@link Connection#rollback() zurück zu rollen}, wenn eine Connection manuell mittels {@link #acquire()}
+	 * ermittelt wird. Die Hilfsmethoden {@link #executeStatement(String, ResultSetCallback)} und
+	 * {@link #executePreparedStatement(String, PreparedStatementCallback, ResultSetCallback)} erledigen dies selbstständig.
+	 * @return {@code true}, wenn der ConnectionPool für auto-commit konfiguriert wurde, ansonsten {@code false}
+	 */
+	public boolean isAutoCommit() {
+		return isAutoCommit;
+	}
+	
+	/**
 	 * Schließt alle verfügbaren Connections dieses ConnectionPools und trägt sie aus.
 	 * Connections die noch in Benutzung sind, werden nur ausgetragen aber nicht geschlossen,
 	 * darum müssen sich die aktuellen Inhaber kümmern.
@@ -185,12 +227,16 @@ public class ConnectionPool {
 		try(PreparedStatement stmt = con.prepareStatement(sql)) {
 			statementCallback.callback(stmt);
 			try(ResultSet rs = stmt.executeQuery()) {
+				T value = null;
 				if(resultSetCallback != null) {
-					return resultSetCallback.callback(rs);
-				} else {
-					return null;
+					value = resultSetCallback.callback(rs);
 				}
+				con.commit();
+				return value;
 			}
+		} catch(SQLException e) {
+			con.rollback();
+			throw e;
 		} finally {
 			release(con);
 		}
@@ -212,12 +258,16 @@ public class ConnectionPool {
 		Connection con = acquire();
 		try(Statement stmt = con.createStatement()) {
 			try(ResultSet rs = stmt.executeQuery(sql)) {
+				T value = null;
 				if(resultSetCallback != null) {
-					return resultSetCallback.callback(rs);
-				} else {
-					return null;
+					value = resultSetCallback.callback(rs);
 				}
+				con.commit();
+				return value;
 			}
+		} catch(SQLException e) {
+			con.rollback();
+			throw e;
 		} finally {
 			release(con);
 		}
