@@ -14,7 +14,7 @@ public class ServiceLocatorLocator {
 		myLocatorMapping.put(name, locator);
 	}
 	
-	public ServiceLocator getServiceLocator(String name) {
+	public ServiceLocator_I getServiceLocator(String name) {
 		return myLocatorMapping.get(name);
 	}
 	
