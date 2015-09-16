@@ -231,11 +231,15 @@ public class ConnectionPool {
 				if(resultSetCallback != null) {
 					value = resultSetCallback.callback(rs);
 				}
-				con.commit();
+				if(!isAutoCommit()) {
+					con.commit();
+				}
 				return value;
 			}
 		} catch(SQLException e) {
-			con.rollback();
+			if(!isAutoCommit()) {
+				con.rollback();
+			}
 			throw e;
 		} finally {
 			release(con);
@@ -262,11 +266,15 @@ public class ConnectionPool {
 				if(resultSetCallback != null) {
 					value = resultSetCallback.callback(rs);
 				}
-				con.commit();
+				if(!isAutoCommit()) {
+					con.commit();
+				}
 				return value;
 			}
 		} catch(SQLException e) {
-			con.rollback();
+			if(!isAutoCommit()) {
+				con.rollback();
+			}
 			throw e;
 		} finally {
 			release(con);
