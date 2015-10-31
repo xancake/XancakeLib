@@ -4,19 +4,19 @@ import java.util.List;
 import de.xancake.pattern.listener.EventExecutor;
 import de.xancake.pattern.listener.Event_A;
 
-public abstract class Controller_A<M, L extends ViewListener_I, V extends View_I<M, L>, T extends ControllerListener_I> {
+public abstract class Controller<M, L extends ViewListener, V extends View<M, L>, T extends ControllerListener> {
 	private EventExecutor<T> myEventExecutor;
 	private M myModel;
 	private V myView;
 	
-	public Controller_A(M model, V view) {
+	public Controller(M model, V view) {
 		myEventExecutor = new EventExecutor<>();
 		setModel(model);
 		setView(view);
 	}
 	
 	/**
-	 * Gibt das von diesem Controller verwaltete Model zurück.
+	 * Gibt das von diesem Controller verwaltete Model zurÃ¼ck.
 	 * @return Das Model
 	 */
 	public final M getModel() {
@@ -24,10 +24,10 @@ public abstract class Controller_A<M, L extends ViewListener_I, V extends View_I
 	}
 	
 	/**
-	 * Registriert das übergebene Model an diesem Controller.
-	 * Sollte zu diesem Controller schon eine {@link View_I} registriert sein, wird die {@link View_I} mit dem Model befüllt.
+	 * Registriert dasÃ¼bergebene Model an diesem Controller.
+	 * Sollte zu diesem Controller schon eine {@link View} registriert sein, wird die {@link View} mit dem Model befÃ¼llt.
 	 * @param model Das zu verwaltende Model
-	 * @see View_I#fillViewWithModel(Object)
+	 * @see View#fillViewWithModel(Object)
 	 */
 	public final void setModel(M model) {
 		myModel = model;
@@ -35,21 +35,21 @@ public abstract class Controller_A<M, L extends ViewListener_I, V extends View_I
 	}
 	
 	/**
-	 * Gibt die von diesem Controller verwaltete {@link View_I} zurück.
-	 * @return Die {@link View_I}
+	 * Gibt die von diesem Controller verwaltete {@link View} zurÃ¼ck.
+	 * @return Die {@link View}
 	 */
 	public final V getView() {
 		return myView;
 	}
 	
 	/**
-	 * Registriert die übergebene {@link View_I} an diesem Controller.
-	 * Dabei registriert dieser Controller wiederum einen {@link ViewListener_I} auf der {@link View_I}
-	 * und unregestriert sich an einer gebenenfalls vorher registrierten {@link View_I}.
-	 * Sollte zu diesem Controller schon ein Model registriert sein, wird die {@link View_I} mit dem Model befüllt.
-	 * @param view Die zu verwaltende {@link View_I}
+	 * Registriert die Ã¼bergebene {@link View} an diesem Controller.
+	 * Dabei registriert dieser Controller wiederum einen {@link ViewListener} auf der {@link View}
+	 * und unregestriert sich an einer gebenenfalls vorher registrierten {@link View}.
+	 * Sollte zu diesem Controller schon ein Model registriert sein, wird die {@link View} mit dem Model befÃ¼llt.
+	 * @param view Die zu verwaltende {@link View}
 	 * @see #getViewListener()
-	 * @see View_I#fillViewWithModel(Object)
+	 * @see View#fillViewWithModel(Object)
 	 */
 	public final void setView(V view) {
 		unregisterOnView(myView);
@@ -71,7 +71,7 @@ public abstract class Controller_A<M, L extends ViewListener_I, V extends View_I
 	}
 	
 	/**
-	 * Aktualisiert die Oberfläche mit den aktuellen Daten aus dem Model.
+	 * Aktualisiert die OberflÃ¤che mit den aktuellen Daten aus dem Model.
 	 */
 	protected void update() {
 		if(myView != null && myModel != null) {
@@ -80,7 +80,7 @@ public abstract class Controller_A<M, L extends ViewListener_I, V extends View_I
 	}
 	
 	/**
-	 * Fügt dem Controller einen Listener hinzu.
+	 * FÃ¼gt dem Controller einen Listener hinzu.
 	 */
 	public void addControllerListener(T listener) {
 		myEventExecutor.addListener(listener);
@@ -94,7 +94,7 @@ public abstract class Controller_A<M, L extends ViewListener_I, V extends View_I
 	}
 	
 	/**
-	 * Gibt eine Liste aller Listener dieses Controllers zurück.
+	 * Gibt eine Liste aller Listener dieses Controllers zurÃ¼ck.
 	 * @return Eine Liste der Listener dieses Controllers
 	 */
 	protected List<T> getListeners() {
@@ -102,17 +102,17 @@ public abstract class Controller_A<M, L extends ViewListener_I, V extends View_I
 	}
 	
 	/**
-	 * Benachrichtigt alle Listener über das Auftreten des übergebenen {@link Event_A Events}.
-	 * @param event Das Event, über das benachrichtigt werden soll
+	 * Benachrichtigt alle Listener Ã¼ber das Auftreten des Ã¼bergebenen {@link Event_A Events}.
+	 * @param event Das Event, Ã¼ber das benachrichtigt werden soll
 	 */
 	protected void fireEvent(Event_A<T> event) {
 		myEventExecutor.fireEvent(event);
 	}
 	
 	/**
-	 * Gibt den {@link ViewListener_I} zurück, der auf der {@link View_I} die von diesem Controller verwaltet werden soll registriert wird.
-	 * Es muss gewährleistet werden, dass diese Methode immer den selben {@link ViewListener_I} zurückgibt.
-	 * @return Der {@link ViewListener_I}
+	 * Gibt den {@link ViewListener} zurÃ¼ck, der auf der {@link View} die von diesem Controller verwaltet werden soll registriert wird.
+	 * Es muss gewÃ¤hrleistet werden, dass diese Methode immer den selben {@link ViewListener} zurÃ¼ckgibt.
+	 * @return Der {@link ViewListener}
 	 */
 	protected abstract L getViewListener();
 }

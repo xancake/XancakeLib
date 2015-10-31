@@ -6,7 +6,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import de.xancake.ui.mvc.View_A;
 
-public abstract class SwingWindowView_A<M, L extends WindowViewListener_I> extends View_A<M, L> implements WindowView_I<M, L> {
+public abstract class SwingWindowView_A<M, L extends WindowViewListener> extends View_A<M, L> implements WindowView<M, L> {
 	protected JFrame myFrame;
 	
 	public SwingWindowView_A(String title) {

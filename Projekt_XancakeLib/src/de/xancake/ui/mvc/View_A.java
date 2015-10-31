@@ -1,6 +1,6 @@
 package de.xancake.ui.mvc;
 
-public abstract class View_A<M, L extends ViewListener_I> implements View_I<M, L> {
+public abstract class View_A<M, L extends ViewListener> implements View<M, L> {
 	protected L myListener;
 	
 	public View_A() {

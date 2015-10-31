@@ -1,8 +1,8 @@
 package de.xancake.ui.mvc.window;
 
-import de.xancake.ui.mvc.ViewListener_I;
+import de.xancake.ui.mvc.ViewListener;
 
-public interface WindowViewListener_I extends ViewListener_I {
+public interface WindowViewListener extends ViewListener {
 	/**
 	 * Wird von der View aufgerufen, wenn sie angezeigt wird.
 	 */

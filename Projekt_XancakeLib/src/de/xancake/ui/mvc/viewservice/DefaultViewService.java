@@ -5,11 +5,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
-import de.xancake.ui.mvc.Controller_A;
-import de.xancake.ui.mvc.ViewListener_I;
-import de.xancake.ui.mvc.View_I;
+import de.xancake.ui.mvc.Controller;
+import de.xancake.ui.mvc.ViewListener;
+import de.xancake.ui.mvc.View;
 
-public class DefaultViewService implements ViewService_I {
+public class DefaultViewService implements ViewService {
 	@SuppressWarnings("rawtypes")
 	private Map<Class, Class> myViewMapping;
 	
@@ -19,7 +19,7 @@ public class DefaultViewService implements ViewService_I {
 	
 	@Override
 	@SuppressWarnings("rawtypes")
-	public <M, L extends ViewListener_I, V extends View_I<M, L>> void registerView(Class<? extends Controller_A<M, L, V, ?>> controller, Class<? extends V> view) {
+	public <M, L extends ViewListener, V extends View<M, L>> void registerView(Class<? extends Controller<M, L, V, ?>> controller, Class<? extends V> view) {
 		if(view == null) {
 			throw new IllegalArgumentException("Die View-Klasse darf nicht 'null' sein!");
 		}
@@ -28,7 +28,7 @@ public class DefaultViewService implements ViewService_I {
 		}
 		Constructor<?> constructor = getEmptyConstructor(view);
 		if(constructor == null) {
-			throw new IllegalArgumentException("Die View-Klasse enthält keinen parameterlosen Konstruktor!");
+			throw new IllegalArgumentException("Die View-Klasse enthÃ¤lt keinen parameterlosen Konstruktor!");
 		}
 		if(!Modifier.isPublic(constructor.getModifiers())) {
 			throw new IllegalArgumentException("Der parameterlose Konstruktor der View-Klasse muss public sein!");
@@ -39,9 +39,9 @@ public class DefaultViewService implements ViewService_I {
 	
 	/**
 	 * Hilfsmethode, die den parameterlosen Konstruktor einer Klasse findet.
-	 * Für innere Klassen muss der erste Parameter aller Konstruktoren der Typ der äußeren
-	 * Klasse sein (wird durch die Sprache gewährleistet), siehe {@link Class#getConstructor(Class...)}.
-	 * @param clazz Die zu prüfende Klasse
+	 * FÃ¼r innere Klassen muss der erste Parameter aller Konstruktoren der Typ der Ã¤uÃŸeren
+	 * Klasse sein (wird durch die Sprache gewÃ¤hrleistet), siehe {@link Class#getConstructor(Class...)}.
+	 * @param clazz Die zu prÃ¼fende Klasse
 	 * @return Der gefundene Konstruktor oder {@code null}, wenn keiner gefunden wurden konnte
 	 * @see Class#getConstructor(Class...)
 	 */
@@ -53,7 +53,7 @@ public class DefaultViewService implements ViewService_I {
 				// Parameterloser Konstruktor gefunden
 				return constructor;
 			} else if(clazz.getEnclosingClass() != null && constructorParameterTypes.length == 1 && constructorParameterTypes[0].equals(clazz.getEnclosingClass())) {
-				// Parameterloser Konstruktor für innere Klassen gefunden (@see Class#getConstructor(Class...))
+				// Parameterloser Konstruktor fÃ¼r innere Klassen gefunden (@see Class#getConstructor(Class...))
 				return constructor;
 			}
 		}
@@ -62,13 +62,13 @@ public class DefaultViewService implements ViewService_I {
 	
 	@Override
 	@SuppressWarnings("rawtypes")
-	public boolean isControllerRegistered(Class<? extends Controller_A> controller) {
+	public boolean isControllerRegistered(Class<? extends Controller> controller) {
 		return myViewMapping.containsKey(controller);
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public <M, L extends ViewListener_I, V extends View_I<M, L>> V createView(Class<? extends Controller_A<M, L, V, ?>> controller) throws InvocationTargetException {
+	public <M, L extends ViewListener, V extends View<M, L>> V createView(Class<? extends Controller<M, L, V, ?>> controller) throws InvocationTargetException {
 		try {
 			Class<V> viewClass = (Class<V>)myViewMapping.get(controller);
 			if(viewClass == null) {
@@ -89,14 +89,14 @@ public class DefaultViewService implements ViewService_I {
 			// NoSuchMethodException, wenn die View-Klasse keinen parameterlosen Konstruktor hat
 			// IllegalArgumentException, wenn etwas mit den Parametern nicht stimmt
 			// Diese Exceptions sollten allesamt nicht auftreten, wenn die Checks in registerView korrekt sind
-			throw new RuntimeException("Diese Exception sollte nicht auftreten. Wenn sie dennoch auftrat handelt es sich hierbei um einen Programmierfehler. Bitte benachrichtigen Sie den/die Entwickler mitsamt des Stacktraces, um diesen Fehler in Zukunft beheben zu können.", e);
+			throw new RuntimeException("Diese Exception sollte nicht auftreten. Wenn sie dennoch auftrat handelt es sich hierbei um einen Programmierfehler. Bitte benachrichtigen Sie den/die Entwickler mitsamt des Stacktraces, um diesen Fehler in Zukunft beheben zu kÃ¶nnen.", e);
 		}
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public <M, L extends ViewListener_I, V extends View_I<M, L>> V createView(Controller_A<M, L, V, ?> controller) throws InvocationTargetException {
-		return createView((Class<? extends Controller_A<M, L, V, ?>>)controller.getClass());
+	public <M, L extends ViewListener, V extends View<M, L>> V createView(Controller<M, L, V, ?> controller) throws InvocationTargetException {
+		return createView((Class<? extends Controller<M, L, V, ?>>)controller.getClass());
 	}
 	
 	@Override
