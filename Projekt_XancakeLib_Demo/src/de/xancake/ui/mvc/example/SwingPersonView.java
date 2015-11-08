@@ -15,9 +15,9 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import de.xancake.ui.mvc.View_A;
-import de.xancake.ui.mvc.window.WindowView_I;
+import de.xancake.ui.mvc.window.WindowView;
 
-public class SwingPersonView extends View_A<PersonModel, PersonViewListener_I> implements WindowView_I<PersonModel, PersonViewListener_I> {
+public class SwingPersonView extends View_A<PersonModel, PersonViewListener_I> implements WindowView<PersonModel, PersonViewListener_I> {
 	private JFrame myFrame;
 	private JPanel myContent;
 	private JSpinner myIdentField;

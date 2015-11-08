@@ -1,10 +1,10 @@
 package de.xancake.ui.mvc.example;
 
 import java.util.Arrays;
-import de.xancake.ui.mvc.ControllerListener_I;
-import de.xancake.ui.mvc.window.WindowController_A;
+import de.xancake.ui.mvc.ControllerListener;
+import de.xancake.ui.mvc.window.WindowController;
 
-public class PersonController extends WindowController_A<PersonModel, PersonViewListener_I, SwingPersonView, ControllerListener_I> implements PersonViewListener_I {
+public class PersonController extends WindowController<PersonModel, PersonViewListener_I, SwingPersonView, ControllerListener> implements PersonViewListener_I {
 	private static final Integer[] IDENTEN;
 	private static final String[]  VORNAMEN  = {"Lars", "Hans", "Sven", "Peter", "Marie", "Jennifer", "Melanie", "Larissa"};
 	private static final String[]  NACHNAMEN = {"Nielsen", "Wurst", "Schneider", "Planlos", "Mertens", "Momsen", "Mutig", "Lustig"};

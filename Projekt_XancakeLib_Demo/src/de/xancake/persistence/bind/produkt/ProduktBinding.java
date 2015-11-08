@@ -1,8 +1,8 @@
 package de.xancake.persistence.bind.produkt;
 
 import java.math.BigDecimal;
-import de.xancake.persistence.bind.AttributeBinding;
-import de.xancake.persistence.bind.Binding;
+import de.xancake.io.persistence.bind.AttributeBinding;
+import de.xancake.io.persistence.bind.Binding;
 
 public class ProduktBinding extends Binding<Produkt> {
 	private static final String ENTITY = "Produkt";

@@ -3,12 +3,12 @@ package de.xancake.persistence.bind.produkt;
 import java.math.BigDecimal;
 import de.xancake.io.db.sql.config.DBConfigurationSingleton;
 import de.xancake.io.db.sql.config.DBConfiguration_I;
-import de.xancake.persistence.Creator_I;
-import de.xancake.persistence.Loader_I;
-import de.xancake.persistence.PersistenceBroker_I;
-import de.xancake.persistence.Storer_I;
-import de.xancake.persistence.bind.AttributeBinding;
-import de.xancake.persistence.db.sql.DBPersistenceBroker;
+import de.xancake.io.persistence.Creator_I;
+import de.xancake.io.persistence.Loader_I;
+import de.xancake.io.persistence.PersistenceBroker_I;
+import de.xancake.io.persistence.Storer_I;
+import de.xancake.io.persistence.bind.AttributeBinding;
+import de.xancake.io.persistence.db.sql.DBPersistenceBroker;
 
 public class ProduktDemo {
 	public static void main(String[] args) throws Exception {

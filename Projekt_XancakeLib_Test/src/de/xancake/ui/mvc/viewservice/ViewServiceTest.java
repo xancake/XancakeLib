@@ -6,15 +6,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import de.xancake.ui.mvc.ControllerListener_I;
-import de.xancake.ui.mvc.Controller_A;
-import de.xancake.ui.mvc.ViewListener_I;
+import de.xancake.ui.mvc.ControllerListener;
+import de.xancake.ui.mvc.Controller;
+import de.xancake.ui.mvc.ViewListener;
 import de.xancake.ui.mvc.View_A;
-import de.xancake.ui.mvc.View_I;
+import de.xancake.ui.mvc.View;
 
 @RunWith(JUnit4.class)
 public class ViewServiceTest {
-	private ViewService_I myViewService;
+	private ViewService myViewService;
 	
 	@Before
 	public void setUp() {
@@ -174,7 +174,7 @@ public class ViewServiceTest {
 		assertNotEquals(stringController.getView(), doubleController.getView());
 	}
 	
-	private abstract class ViewDummy<M> extends View_A<M, ViewListener_I> {
+	private abstract class ViewDummy<M> extends View_A<M, ViewListener> {
 		@Override
 		public void fillViewWithModel(M model) {}
 		
@@ -182,13 +182,13 @@ public class ViewServiceTest {
 		public String toString() { return getClass().getSimpleName(); }
 	}
 	
-	private abstract class ControllerDummy<M, V extends View_I<M, ViewListener_I>> extends Controller_A<M, ViewListener_I, V, ControllerListener_I> {
+	private abstract class ControllerDummy<M, V extends View<M, ViewListener>> extends Controller<M, ViewListener, V, ControllerListener> {
 		public ControllerDummy() {
 			super(null, null);
 		}
 		
 		@Override
-		protected ViewListener_I getViewListener() { return null; }
+		protected ViewListener getViewListener() { return null; }
 	}
 	
 	public class StringViewDummy extends ViewDummy<String> {}
@@ -196,7 +196,7 @@ public class ViewServiceTest {
 	public class DoubleViewDummy extends ViewDummy<Double> {}
 	
 	public abstract class AbstractViewDummy extends ViewDummy<Object> {}
-	public interface InterfaceViewDummy extends View_I<Object, ViewListener_I> {}
+	public interface InterfaceViewDummy extends View<Object, ViewListener> {}
 	public class NoParameterFreeConstructorViewDummy extends ViewDummy<Object> {
 		public NoParameterFreeConstructorViewDummy(String string) {}
 		public NoParameterFreeConstructorViewDummy(Integer integer) {}
@@ -215,5 +215,5 @@ public class ViewServiceTest {
 	public class IntegerControllerDummy extends ControllerDummy<Integer, IntegerViewDummy> {}
 	public class DoubleControllerDummy extends ControllerDummy<Double, DoubleViewDummy> {}
 	public class GenericControllerDummy extends ControllerDummy<Object, ViewDummy<Object>> {}
-	public class InterfaceControllerDummy extends ControllerDummy<Object, View_I<Object, ViewListener_I>> {}
+	public class InterfaceControllerDummy extends ControllerDummy<Object, View<Object, ViewListener>> {}
 }
