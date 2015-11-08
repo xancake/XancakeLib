@@ -1,10 +1,10 @@
-package de.xancake.domain.kunde;
+package de.xancake.io.persistence.domain.kunde;
 
 import java.io.IOException;
-import de.xancake.domain.adresse.DAdresseImpl;
-import de.xancake.domain.adresse.DAdresse;
 import de.xancake.io.persistence.broker.PersistenceBroker;
 import de.xancake.io.persistence.domain.AbstractDomainObject;
+import de.xancake.io.persistence.domain.adresse.DAdresse;
+import de.xancake.io.persistence.domain.adresse.DAdresseImpl;
 
 public class DKundeImpl extends AbstractDomainObject<Kunde> implements DKunde {
 	private DAdresse _dadresse;

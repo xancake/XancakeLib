@@ -1,7 +1,7 @@
-package de.xancake.domain.produkt;
+package de.xancake.io.persistence.domain.produkt;
 
-import de.xancake.domain.kunde.DKunde;
 import de.xancake.io.persistence.domain.DomainObject;
+import de.xancake.io.persistence.domain.kunde.DKunde;
 
 public interface DProdukt extends DomainObject {
 	/**

@@ -1,18 +1,18 @@
-package de.xancake.domain;
+package de.xancake.io.persistence.domain;
 
 import java.math.BigDecimal;
-import de.xancake.domain.adresse.Adresse;
-import de.xancake.domain.adresse.AdresseBinding;
-import de.xancake.domain.kunde.Kunde;
-import de.xancake.domain.kunde.KundeBinding;
-import de.xancake.domain.produkt.Produkt;
-import de.xancake.domain.produkt.ProduktBinding;
 import de.xancake.io.db.sql.config.DBConfigurationProperties;
 import de.xancake.io.db.sql.config.DBConfiguration_I;
 import de.xancake.io.persistence.broker.PersistenceBroker;
 import de.xancake.io.persistence.broker.db.DBPersistenceBroker;
 import de.xancake.io.persistence.domain.Persistable;
 import de.xancake.io.persistence.domain.PersistableImpl;
+import de.xancake.io.persistence.domain.adresse.Adresse;
+import de.xancake.io.persistence.domain.adresse.AdresseBinding;
+import de.xancake.io.persistence.domain.kunde.Kunde;
+import de.xancake.io.persistence.domain.kunde.KundeBinding;
+import de.xancake.io.persistence.domain.produkt.Produkt;
+import de.xancake.io.persistence.domain.produkt.ProduktBinding;
 
 public class PersistableDemo {
 	public static void main(String[] args) throws Exception {

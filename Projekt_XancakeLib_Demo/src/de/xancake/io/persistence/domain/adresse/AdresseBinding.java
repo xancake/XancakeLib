@@ -1,4 +1,4 @@
-package de.xancake.domain.adresse;
+package de.xancake.io.persistence.domain.adresse;
 
 import de.xancake.io.persistence.bind.SimpleAttributeBinding;
 import de.xancake.io.persistence.bind.AbstractTypeBinding;

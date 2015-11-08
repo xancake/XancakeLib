@@ -1,4 +1,4 @@
-package de.xancake.domain.kunde;
+package de.xancake.io.persistence.domain.kunde;
 
 import java.util.Objects;
 

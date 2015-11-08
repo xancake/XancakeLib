@@ -1,15 +1,15 @@
-package de.xancake.domain;
+package de.xancake.io.persistence.domain;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import de.xancake.domain.adresse.AdresseBinding;
-import de.xancake.domain.kunde.KundeBinding;
-import de.xancake.domain.produkt.ProduktBinding;
 import de.xancake.io.db.sql.config.DBConfigurationSingleton;
 import de.xancake.io.db.sql.config.DBConfiguration_I;
 import de.xancake.io.persistence.bind.TypeBinding;
 import de.xancake.io.persistence.broker.PersistenceCreator;
 import de.xancake.io.persistence.broker.db.DBCreator;
+import de.xancake.io.persistence.domain.adresse.AdresseBinding;
+import de.xancake.io.persistence.domain.kunde.KundeBinding;
+import de.xancake.io.persistence.domain.produkt.ProduktBinding;
 
 public class TableCreatorMain {
 	private static final LinkedList<TypeBinding<?>> BINDINGS = new LinkedList<TypeBinding<?>>();

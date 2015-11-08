@@ -1,8 +1,8 @@
-package de.xancake.domain.kunde;
+package de.xancake.io.persistence.domain.kunde;
 
-import de.xancake.domain.adresse.Adresse;
 import de.xancake.io.persistence.bind.SimpleAttributeBinding;
 import de.xancake.io.persistence.bind.AbstractTypeBinding;
+import de.xancake.io.persistence.domain.adresse.Adresse;
 
 public class KundeBinding extends AbstractTypeBinding<Kunde> {
 	private static final String ENTITY = "Kunde";

@@ -1,9 +1,9 @@
-package de.xancake.domain.produkt;
+package de.xancake.io.persistence.domain.produkt;
 
 import java.io.IOException;
-import de.xancake.domain.kunde.DKunde;
 import de.xancake.io.persistence.broker.PersistenceBroker;
 import de.xancake.io.persistence.domain.AbstractDomainObject;
+import de.xancake.io.persistence.domain.kunde.DKunde;
 
 public class DProduktImpl extends AbstractDomainObject<Produkt> implements DProdukt {
 	

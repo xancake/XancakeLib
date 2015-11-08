@@ -1,4 +1,4 @@
-package de.xancake.domain.produkt;
+package de.xancake.io.persistence.domain.produkt;
 
 import java.math.BigDecimal;
 import java.util.Objects;
