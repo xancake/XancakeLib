@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -17,9 +18,11 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+
 import de.xancake.ui.swing.components.SwingDemonstrator;
 
 public class JDropDownButtonDemo extends SwingDemonstrator {
+	@SuppressWarnings("serial")
 	private static class TestButton extends JButton {
 		public TestButton(String text) {
 			super(text);
@@ -42,6 +45,7 @@ public class JDropDownButtonDemo extends SwingDemonstrator {
 		
 		ActionListener listener = new ActionListener() {
 			@Override
+			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource() instanceof JDropDownButton) {
 					JDropDownButton<String> dropDownButton = (JDropDownButton<String>)e.getSource();
