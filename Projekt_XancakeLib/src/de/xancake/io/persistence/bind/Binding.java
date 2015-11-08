@@ -1,4 +1,4 @@
-package de.xancake.persistence.bind;
+package de.xancake.io.persistence.bind;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import de.xancake.io.persistence.bind.TypeBinding_I;
 
 public class Binding<T> implements TypeBinding_I<T> {
 	private String myEntity;

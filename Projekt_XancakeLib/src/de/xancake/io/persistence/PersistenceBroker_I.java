@@ -1,6 +1,6 @@
-package de.xancake.persistence;
+package de.xancake.io.persistence;
 
-import de.xancake.persistence.bind.TypeBinding_I;
+import de.xancake.io.persistence.bind.TypeBinding_I;
 
 public interface PersistenceBroker_I {
 	

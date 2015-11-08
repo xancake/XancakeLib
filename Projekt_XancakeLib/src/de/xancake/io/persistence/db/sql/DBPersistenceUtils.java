@@ -1,7 +1,7 @@
-package de.xancake.persistence.db.sql;
+package de.xancake.io.persistence.db.sql;
 
 import java.math.BigDecimal;
-import de.xancake.persistence.bind.TypeBinding_I;
+import de.xancake.io.persistence.bind.TypeBinding_I;
 
 public final class DBPersistenceUtils {
 	private DBPersistenceUtils() {}

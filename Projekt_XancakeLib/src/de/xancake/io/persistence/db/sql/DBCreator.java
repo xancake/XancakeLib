@@ -1,12 +1,12 @@
-package de.xancake.persistence.db.sql;
+package de.xancake.io.persistence.db.sql;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Objects;
 import de.xancake.io.db.sql.ConnectionPool;
-import de.xancake.persistence.Creator_I;
-import de.xancake.persistence.bind.AttributeBinding;
-import de.xancake.persistence.bind.TypeBinding_I;
+import de.xancake.io.persistence.Creator_I;
+import de.xancake.io.persistence.bind.AttributeBinding;
+import de.xancake.io.persistence.bind.TypeBinding_I;
 
 public class DBCreator<T> implements Creator_I<T> {
 	private static final String SQL_CREATE_TABLE    = "CREATE TABLE {0} ({1}, PRIMARY KEY ({2}))";

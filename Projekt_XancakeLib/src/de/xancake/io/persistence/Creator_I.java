@@ -1,4 +1,4 @@
-package de.xancake.persistence;
+package de.xancake.io.persistence;
 
 import java.io.IOException;
 

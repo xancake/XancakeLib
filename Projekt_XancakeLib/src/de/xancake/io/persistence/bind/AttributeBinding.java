@@ -1,4 +1,4 @@
-package de.xancake.persistence.bind;
+package de.xancake.io.persistence.bind;
 
 public class AttributeBinding<T> {
 	private String myName;

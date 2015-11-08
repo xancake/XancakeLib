@@ -1,44 +1,44 @@
-package de.xancake.persistence.bind;
+package de.xancake.io.persistence.bind;
 
 import java.util.List;
 
 public interface TypeBinding_I<T> {
 	/**
-	 * Gibt den Namen der gebundenen Entität zurück.
-	 * @return Der Name der Entität
+	 * Gibt den Namen der gebundenen Entitï¿½t zurï¿½ck.
+	 * @return Der Name der Entitï¿½t
 	 */
 	String getEntityName();
 	
 	/**
-	 * Gibt den Namen des ID-Attributs zurück.
+	 * Gibt den Namen des ID-Attributs zurï¿½ck.
 	 * @return Der Name des ID-Attributs
 	 */
 	AttributeBinding<Integer> getIDAttribute();
 	
 	/**
-	 * Gibt die Namen der persistierten Attribute zurück.
+	 * Gibt die Namen der persistierten Attribute zurï¿½ck.
 	 * @return Die Namen der persistierten Attribute
 	 */
 	List<AttributeBinding<?>> getAttributes();
 	
 	/**
-	 * Gibt den Wert des Attributs einer Entität zurück.
-	 * @param object Die Entität, deren Attribut erfragt werden soll
+	 * Gibt den Wert des Attributs einer Entitï¿½t zurï¿½ck.
+	 * @param object Die Entitï¿½t, deren Attribut erfragt werden soll
 	 * @param attribute Das Attribut das erfragt werden soll
 	 * @return Der Wert des Attributs
 	 */
 	<V> V get(T object, AttributeBinding<V> attribute);
 	
 	/**
-	 * Setzt den Wert des Attributes einer Entität.
-	 * @param object Die Entität deren Attribut gesetzt werden soll
+	 * Setzt den Wert des Attributes einer Entitï¿½t.
+	 * @param object Die Entitï¿½t deren Attribut gesetzt werden soll
 	 * @param attribute Das Attribut das gesetzt werden soll
 	 * @param value Der Wert den das Attribut erhalten soll
 	 */
 	<V> void set(T object, AttributeBinding<V> attribute, V value);
 	
 	/**
-	 * Erzeugt ein neues Objekt der gebundenen Entität.
+	 * Erzeugt ein neues Objekt der gebundenen Entitï¿½t.
 	 * @return Das neue Objekt
 	 */
 	T create();

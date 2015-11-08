@@ -1,4 +1,4 @@
-package de.xancake.persistence.db.sql;
+package de.xancake.io.persistence.db.sql;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -8,9 +8,9 @@ import java.util.Objects;
 import de.xancake.io.db.sql.ConnectionPool;
 import de.xancake.io.db.sql.ConnectionPool.PreparedStatementCallback;
 import de.xancake.io.db.sql.ConnectionPool.ResultSetCallback;
-import de.xancake.persistence.Loader_I;
-import de.xancake.persistence.bind.AttributeBinding;
-import de.xancake.persistence.bind.TypeBinding_I;
+import de.xancake.io.persistence.Loader_I;
+import de.xancake.io.persistence.bind.AttributeBinding;
+import de.xancake.io.persistence.bind.TypeBinding_I;
 
 public class DBLoader<T> implements Loader_I<T> {
 	private static final String SQL_SELECT = "SELECT * FROM {0} WHERE {1}=?";
