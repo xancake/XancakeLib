@@ -75,7 +75,7 @@ public class DBCreator<T> implements Creator_I<T> {
 			myConnectionPool.executeStatement(sql, null);
 			dropPrimaryKeySequence(myBinding);
 		} catch(SQLException | InterruptedException e) {
-			throw new IOException("Fehler beim L�schen der Tabelle '" + myBinding.getEntityName() + "'", e);
+			throw new IOException("Fehler beim Löschen der Tabelle '" + myBinding.getEntityName() + "'", e);
 		}
 	}
 	
@@ -86,7 +86,7 @@ public class DBCreator<T> implements Creator_I<T> {
 		try {
 			myConnectionPool.executeStatement(sql, null);
 		} catch(SQLException | InterruptedException e) {
-			throw new IOException("Fehler beim L�schen der Sequenz '" + sequence + "'", e);
+			throw new IOException("Fehler beim Löschen der Sequenz '" + sequence + "'", e);
 		}
 	}
 }

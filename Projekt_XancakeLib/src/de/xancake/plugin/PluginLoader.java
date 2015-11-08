@@ -14,7 +14,7 @@ import de.xancake.io.file.filter.FileExtensionFilter;
 
 class PluginLoader {
 	@SuppressWarnings("unchecked")
-  public static <M extends PluginManager_I> List<Plugin_I<M>> loadPlugins(M pluginManager, File pluginDir) throws IOException {
+	public static <M extends PluginManager_I> List<Plugin_I<M>> loadPlugins(M pluginManager, File pluginDir) throws IOException {
 		File[] pluginJars = pluginDir.listFiles(new FileExtensionFilter("jar"));
 		ClassLoader classLoader = new URLClassLoader(fileArrayToURLArray(pluginJars));
 		List<Class<Plugin_I<M>>> pluginClasses = extractClassesFromJARs(pluginJars, classLoader, (Class<M>)pluginManager.getClass());

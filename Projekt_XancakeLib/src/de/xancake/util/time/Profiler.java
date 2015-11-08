@@ -16,9 +16,9 @@ public class Profiler {
 	}
 	
 	/**
-	 * Misst die Ausführungszeit der Aktion in Millisekunden.
+	 * Misst die AusfÃ¼hrungszeit der Aktion in Millisekunden.
 	 * @param action Die zu profilierende Aktion
-	 * @return Die Ausführungszeit der Aktion in Millisekunden
+	 * @return Die AusfÃ¼hrungszeit der Aktion in Millisekunden
 	 */
 	public long profile(Action action) {
 		myTimer.start();

@@ -77,7 +77,7 @@ public class DBStorer<T> implements Storer_I<T> {
 		try {
 			myConnectionPool.executePreparedStatement(sql, stmtCallback, null);
 		} catch(SQLException | InterruptedException e) {
-			throw new IOException("Fehler beim Anlegen eines Datensatzes f�r '" + myBinding.getEntityName() + "'", e);
+			throw new IOException("Fehler beim Anlegen eines Datensatzes für '" + myBinding.getEntityName() + "'", e);
 		}
 	}
 	
@@ -118,7 +118,7 @@ public class DBStorer<T> implements Storer_I<T> {
 		try {
 			myConnectionPool.executePreparedStatement(sql, stmtCallback, null);
 		} catch(SQLException | InterruptedException e) {
-			throw new IOException("Fehler beim Aktualisieren eines Datensatzes f�r '" + myBinding.getEntityName() + "'", e);
+			throw new IOException("Fehler beim Aktualisieren eines Datensatzes für '" + myBinding.getEntityName() + "'", e);
 		}
 	}
 	

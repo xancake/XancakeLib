@@ -8,7 +8,7 @@ import de.xancake.ui.mvc.View;
 public interface ViewService {
 	/**
 	 * Registriert die übergebene {@link View View}-Klasse für die übergebene
-	 * {@link Controller Controller}-Klasse. Dabei wird auch  geprüft, ob die
+	 * {@link Controller Controller}-Klasse. Dabei wird auch geprüft, ob die
 	 * View-Klasse als Parameter erlaubt ist.
 	 * @param controller Die Klasse des Controllers
 	 * @param view Die Klasse der View
