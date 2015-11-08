@@ -1,4 +1,4 @@
-package de.xancake.persistence.bind.produkt;
+package de.xancake.io.persistence.bind.produkt;
 
 import java.math.BigDecimal;
 import java.util.Objects;
