@@ -1,5 +1,6 @@
 package de.xancake.io.db.sql;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,6 +12,7 @@ import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
+
 import de.xancake.io.db.sql.config.DBConfiguration_I;
 
 /**
@@ -217,12 +219,13 @@ public class ConnectionPool {
 	 * @param statementCallback Das Callback für das {@link PreparedStatement} zur Konfiguration
 	 * @param resultSetCallback Das Callback zum Auslesen des {@link ResultSet}s
 	 * @return Das Rückgabeobjekt des {@link ResultSetCallback}s
-	 * @throws SQLException Wenn ein Fehler beim Ausführen des SQL-Statements auftritt
+	 * @throws IOException Wenn ein IO-Fehler beim Ausführen des SQL-Statements auftritt
+	 * @throws SQLException Wenn ein SQL-Fehler beim Ausführen des SQL-Statements auftritt
 	 * @throws InterruptedException Wenn der aufrufende Thread beim {@link #acquire() Warten auf eine Verbindung} interrupted wird
 	 * @see PreparedStatementCallback
 	 * @see ResultSetCallback
 	 */
-	public <T> T executePreparedStatement(String sql, PreparedStatementCallback statementCallback, ResultSetCallback<T> resultSetCallback) throws SQLException, InterruptedException {
+	public <T> T executePreparedStatement(String sql, PreparedStatementCallback statementCallback, ResultSetCallback<T> resultSetCallback) throws IOException, SQLException, InterruptedException {
 		Connection con = acquire();
 		try(PreparedStatement stmt = con.prepareStatement(sql)) {
 			statementCallback.callback(stmt);
@@ -236,7 +239,7 @@ public class ConnectionPool {
 				}
 				return value;
 			}
-		} catch(SQLException e) {
+		} catch(IOException | SQLException e) {
 			if(!isAutoCommit()) {
 				con.rollback();
 			}
@@ -254,11 +257,12 @@ public class ConnectionPool {
 	 * @param sql Der SQL-Befehl der ausgeführt werden soll
 	 * @param resultSetCallback Das Callback zum Auslesen des {@link ResultSet}s
 	 * @return Das Rückgabeobjekt des {@link ResultSetCallback}s
-	 * @throws SQLException Wenn ein Fehler beim Ausführen des SQL-Statements auftritt
+	 * @throws IOException Wenn ein IO-Fehler beim Ausführen des SQL-Statements auftritt
+	 * @throws SQLException Wenn ein SQL-Fehler beim Ausführen des SQL-Statements auftritt
 	 * @throws InterruptedException Wenn der aufrufende Thread beim {@link #acquire() Warten auf eine Verbindung} interrupted wird
 	 * @see ResultSetCallback
 	 */
-	public <T> T executeStatement(String sql, ResultSetCallback<T> resultSetCallback) throws SQLException, InterruptedException {
+	public <T> T executeStatement(String sql, ResultSetCallback<T> resultSetCallback) throws IOException, SQLException, InterruptedException {
 		Connection con = acquire();
 		try(Statement stmt = con.createStatement()) {
 			try(ResultSet rs = stmt.executeQuery(sql)) {
@@ -271,7 +275,7 @@ public class ConnectionPool {
 				}
 				return value;
 			}
-		} catch(SQLException e) {
+		} catch(IOException | SQLException e) {
 			if(!isAutoCommit()) {
 				con.rollback();
 			}
@@ -290,9 +294,10 @@ public class ConnectionPool {
 		/**
 		 * Wird vom {@link ConnectionPool} aufgerufen, wenn ein {@link PreparedStatement} konfiguriert werden soll.
 		 * @param stmt Das zu konfigurierende {@link PreparedStatement}
-		 * @throws SQLException Wenn ein Fehler bei der Konfiguration aufgetreten ist
+		 * @throws IOException Wenn ein IO-Fehler bei der Konfiguration aufgetreten ist
+		 * @throws SQLException Wenn ein SQL-Fehler bei der Konfiguration aufgetreten ist
 		 */
-		void callback(PreparedStatement stmt) throws SQLException;
+		void callback(PreparedStatement stmt) throws IOException, SQLException;
 	}
 	
 	/**
@@ -307,9 +312,10 @@ public class ConnectionPool {
 		 * Wird vom {@link ConnectionPool} aufgerufen, wenn ein {@link ResultSet} ausgelesen werden soll.
 		 * @param rs Das auszulesende {@link ResultSet}
 		 * @return Die Rückgabe des Callbacks (Informationen des {@link ResultSet}s in Objekt(e) konvertiert
-		 * @throws SQLException Wenn ein Fehler beim Auslesen aufgetreten ist
+		 * @throws IOException Wenn ein IO-Fehler beim Auslesen aufgetreten ist
+		 * @throws SQLException Wenn ein SQL-Fehler beim Auslesen aufgetreten ist
 		 */
-		T callback(ResultSet rs) throws SQLException;
+		T callback(ResultSet rs) throws IOException, SQLException;
 	}
 	
 	@Override
