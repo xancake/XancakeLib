@@ -1,16 +1,17 @@
 package de.xancake.ui.mvc;
 
 import java.util.List;
-import de.xancake.pattern.listener.EventExecutor;
-import de.xancake.pattern.listener.Event_A;
+
+import de.xancake.pattern.listener.Event;
+import de.xancake.pattern.listener.EventDispatcher;
 
 public abstract class Controller<M, L extends ViewListener, V extends View<M, L>, T extends ControllerListener> {
-	private EventExecutor<T> myEventExecutor;
+	private EventDispatcher<T> myEventDispatcher;
 	private M myModel;
 	private V myView;
 	
 	public Controller(M model, V view) {
-		myEventExecutor = new EventExecutor<>();
+		myEventDispatcher = new EventDispatcher<>();
 		setModel(model);
 		setView(view);
 	}
@@ -83,14 +84,14 @@ public abstract class Controller<M, L extends ViewListener, V extends View<M, L>
 	 * Fügt dem Controller einen Listener hinzu.
 	 */
 	public void addControllerListener(T listener) {
-		myEventExecutor.addListener(listener);
+		myEventDispatcher.addListener(listener);
 	}
 	
 	/**
 	 * Entfernt einen Listener vom Controller.
 	 */
 	public void removeControllerListener(T listener) {
-		myEventExecutor.removeListener(listener);
+		myEventDispatcher.removeListener(listener);
 	}
 	
 	/**
@@ -98,15 +99,15 @@ public abstract class Controller<M, L extends ViewListener, V extends View<M, L>
 	 * @return Eine Liste der Listener dieses Controllers
 	 */
 	protected List<T> getListeners() {
-		return myEventExecutor.getListeners();
+		return myEventDispatcher.getListeners();
 	}
 	
 	/**
 	 * Benachrichtigt alle Listener über das Auftreten des übergebenen {@link Event_A Events}.
 	 * @param event Das Event, über das benachrichtigt werden soll
 	 */
-	protected void fireEvent(Event_A<T> event) {
-		myEventExecutor.fireEvent(event);
+	protected void fireEvent(Event<T> event) {
+		myEventDispatcher.fireEvent(event);
 	}
 	
 	/**
