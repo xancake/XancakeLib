@@ -4,14 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import de.xancake.io.db.sql.query.intern.SqlCommand_I;
-import de.xancake.io.db.sql.query.intern.Stateable_I;
+import de.xancake.io.db.sql.query.intern.SqlCommand;
+import de.xancake.io.db.sql.query.intern.Stateable;
 
-abstract class Stateable extends SqlCommand implements Stateable_I {
+abstract class StateableImpl extends SqlCommandImpl implements Stateable {
 	
 	
 	
-	protected Stateable(String sql, SqlCommand_I predecessor) {
+	protected StateableImpl(String sql, SqlCommand predecessor) {
 		super(sql, predecessor);
 	}
 	

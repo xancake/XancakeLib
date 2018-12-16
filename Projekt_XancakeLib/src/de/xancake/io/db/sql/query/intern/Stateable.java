@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public interface Stateable_I {
+public interface Stateable {
 	
 	/**
 	 * Returns the SQL represented by this Statement.

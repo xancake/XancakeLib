@@ -1,6 +1,6 @@
 package de.xancake.io.db.sql.query.impl;
 
-public enum JoinType {
+public enum JoinTypeImpl {
 	NONE(SqlConstants_I.JOIN_TYPE_NONE),
 	NATURAL(SqlConstants_I.JOIN_TYPE_NATURAL),
 	CROSS(SqlConstants_I.JOIN_TYPE_CROSS),
@@ -10,7 +10,7 @@ public enum JoinType {
 	
 	private String myTypeString;
 	
-	private JoinType(String typeString) {
+	private JoinTypeImpl(String typeString) {
 		myTypeString = typeString;
 	}
 	
