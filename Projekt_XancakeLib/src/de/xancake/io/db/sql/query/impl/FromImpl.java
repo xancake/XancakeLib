@@ -23,12 +23,12 @@ class FromImpl extends StateableImpl implements From {
 	}
 	
 	@Override
-	public Join join(JoinTypeImpl type, String table) {
+	public Join join(JoinType type, String table) {
 		return new JoinImpl(this, type, table);
 	}
 	
 	@Override
-	public Join join(JoinTypeImpl type, String table, String alias) {
+	public Join join(JoinType type, String table, String alias) {
 		return new JoinImpl(this, type, table, alias);
 	}
 	

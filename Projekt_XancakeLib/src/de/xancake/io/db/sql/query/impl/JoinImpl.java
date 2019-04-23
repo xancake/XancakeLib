@@ -9,16 +9,16 @@ import de.xancake.io.db.sql.query.Where;
 import de.xancake.io.db.sql.query.intern.SqlCommand;
 
 class JoinImpl extends StateableImpl implements Join {
-	private JoinTypeImpl _type;
+	private JoinType _type;
 	private String _table;
 	private String _tableAlias;
 	
 	
-	protected JoinImpl(SqlCommand predecessor, JoinTypeImpl type, String table) {
+	protected JoinImpl(SqlCommand predecessor, JoinType type, String table) {
 		this(predecessor, type, table, null);
 	}
 	
-	protected JoinImpl(SqlCommand predecessor, JoinTypeImpl type, String table, String alias) {
+	protected JoinImpl(SqlCommand predecessor, JoinType type, String table, String alias) {
 		super(SqlConstants_I.JOIN, predecessor);
 		_type = type;
 		_table = table;
@@ -26,12 +26,12 @@ class JoinImpl extends StateableImpl implements Join {
 	}
 	
 	@Override
-	public Join join(JoinTypeImpl type, String table) {
+	public Join join(JoinType type, String table) {
 		return new JoinImpl(this, type, table);
 	}
 	
 	@Override
-	public Join join(JoinTypeImpl type, String table, String alias) {
+	public Join join(JoinType type, String table, String alias) {
 		return new JoinImpl(this, type, table, alias);
 	}
 	

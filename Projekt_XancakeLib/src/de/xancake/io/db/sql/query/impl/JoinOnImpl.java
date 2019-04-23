@@ -19,12 +19,12 @@ class JoinOnImpl extends StateableImpl implements JoinOn {
 	}
 	
 	@Override
-	public Join join(JoinTypeImpl type, String table) {
+	public Join join(JoinType type, String table) {
 		return new JoinImpl(this, type, table);
 	}
 	
 	@Override
-	public Join join(JoinTypeImpl type, String table, String alias) {
+	public Join join(JoinType type, String table, String alias) {
 		return new JoinImpl(this, type, table, alias);
 	}
 	
