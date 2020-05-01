@@ -11,7 +11,6 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import de.xancake.ui.swing.components.SwingDemonstrator;
-import de.xancake.ui.swing.components.panel.WordsWrappingPanel;
 
 public class WordWrapPanelDemo extends SwingDemonstrator {
 	public static void main(String[] args) {

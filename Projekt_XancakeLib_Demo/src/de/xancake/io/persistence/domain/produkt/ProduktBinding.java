@@ -14,12 +14,7 @@ public class ProduktBinding extends AbstractTypeBinding<Produkt> {
 	public static final ProduktBinding INSTANCE = new ProduktBinding();
 	
 	private ProduktBinding() {
-	    super(ENTITY, new Factory<Produkt>() {
-			@Override
-            public Produkt create() {
-	            return new Produkt();
-            }
-	    });
+	    super(ENTITY, Produkt::new);
 	    addAttribute(ATT_NUMMER);
 	    addAttribute(ATT_BEZEICHNUNG);
 	    addAttribute(ATT_PREIS);

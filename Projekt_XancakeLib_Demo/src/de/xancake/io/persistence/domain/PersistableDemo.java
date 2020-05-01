@@ -5,8 +5,6 @@ import de.xancake.io.db.sql.config.DBConfigurationProperties;
 import de.xancake.io.db.sql.config.DBConfiguration_I;
 import de.xancake.io.persistence.broker.PersistenceBroker;
 import de.xancake.io.persistence.broker.db.DBPersistenceBroker;
-import de.xancake.io.persistence.domain.Persistable;
-import de.xancake.io.persistence.domain.PersistableImpl;
 import de.xancake.io.persistence.domain.adresse.Adresse;
 import de.xancake.io.persistence.domain.adresse.AdresseBinding;
 import de.xancake.io.persistence.domain.kunde.Kunde;

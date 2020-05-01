@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public class AbstractTypeBinding<T> implements TypeBinding<T> {
 	private String myEntity;
 	private List<SimpleAttributeBinding<?>> myAttributes;
-	private Factory<T> myFactory;
+	private Supplier<T> myFactory;
 	
-	public AbstractTypeBinding(String name, Factory<T> factory) {
+	public AbstractTypeBinding(String name, Supplier<T> factory) {
 		setEntityName(name);
 		myAttributes = new ArrayList<>();
 		myFactory = Objects.requireNonNull(factory);
@@ -80,10 +81,6 @@ public class AbstractTypeBinding<T> implements TypeBinding<T> {
 	
 	@Override
     public T create() {
-	    return myFactory.create();
+	    return myFactory.get();
     }
-	
-	public interface Factory<C> {
-		C create();
-	}
 }

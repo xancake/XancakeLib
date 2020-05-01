@@ -13,12 +13,7 @@ public class KundeBinding extends AbstractTypeBinding<Kunde> {
 	public static final KundeBinding INSTANCE = new KundeBinding();
 	
 	private KundeBinding() {
-	    super(ENTITY, new Factory<Kunde>() {
-			@Override
-            public Kunde create() {
-	            return new Kunde();
-            }
-	    });
+	    super(ENTITY, Kunde::new);
 	    addAttribute(ATT_VORNAME);
 	    addAttribute(ATT_NACHNAME);
 	    addAttribute(ATT_ADRESSE);

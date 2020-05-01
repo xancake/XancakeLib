@@ -12,12 +12,7 @@ public class AdresseBinding extends AbstractTypeBinding<Adresse> {
 	public static final AdresseBinding INSTANCE = new AdresseBinding();
 	
 	private AdresseBinding() {
-	    super(ENTITY, new Factory<Adresse>() {
-			@Override
-            public Adresse create() {
-	            return new Adresse();
-            }
-	    });
+	    super(ENTITY, Adresse::new);
 	    addAttribute(ATT_ORT);
 	    addAttribute(ATT_PLZ);
 	    addAttribute(ATT_STRASSE);
