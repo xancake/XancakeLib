@@ -8,7 +8,9 @@ import java.util.List;
 public class PluginFactory {
 	private PluginFactory() {}
 	
-	public <M extends PluginManager_I> List<Plugin_I<M>> loadPlugins(M pluginManager, String location) throws IOException, URISyntaxException {
+	public List<Plugin> loadPlugins(PluginManager pluginManager, String location) throws IOException,
+		URISyntaxException
+	{
 		return PluginLoader.loadPlugins(pluginManager, new File(ClassLoader.getSystemResource(location).toURI()));
 	}
 	
