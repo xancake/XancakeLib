@@ -1,8 +1,6 @@
 package de.xancake.ui.swing.components.button.dropdown;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxEditor;
 import javax.swing.ComboBoxModel;
@@ -18,8 +16,6 @@ public class JDropDownButton<E> extends JComboBox<E> {
 	private String myText;
 	private Icon myIcon;
 	private ButtonEditor myEditor;
-	
-	private boolean layingOut;
 	
 	public JDropDownButton(String text) {
 		this(text, (Icon)null);
@@ -67,18 +63,15 @@ public class JDropDownButton<E> extends JComboBox<E> {
 	}
 	
 	private void initLayout() {
-//		setPrototypeDisplayValue(null);
+		// setPrototypeDisplayValue(null);
 		getPreferredSize().width = 32;
 		setMaximumSize(getPreferredSize());
 	}
 	
 	private void initListeners() {
-		myEditor.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(e.getSource() == myEditor) {
-					fireActionEvent();
-				}
+		myEditor.addActionListener(e -> {
+			if (e.getSource() == myEditor) {
+				fireActionEvent();
 			}
 		});
 		addPopupMenuListener(new PopupMenuListener() {
@@ -105,7 +98,7 @@ public class JDropDownButton<E> extends JComboBox<E> {
 		public ButtonEditor(String text, Icon icon) {
 			super(text, icon);
 			setBorder(BorderFactory.createEmptyBorder(1, 0, 1, 0));
-//			setBorder(null);
+			// setBorder(null);
 			setContentAreaFilled(false);
 			setDefaultCapable(false);
 		}
