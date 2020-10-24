@@ -8,15 +8,17 @@ import java.util.Objects;
 public class Timer {
 	/**
 	 * Standardimplementation für eine Genauigkeit im Millisekunden-Bereich.
+	 * <p>
 	 * Intern realisiert durch {@link System#currentTimeMillis()}.
 	 */
-	public static final Zeitmesser MILLIS = new SystemMillisZeitmesser();
+	public static final Zeitmesser MILLIS = System::currentTimeMillis;
 	
 	/**
 	 * Standardimplementation für eine Genauigkeit im Nanosekunden-Bereich.
+	 * <p>
 	 * Intern realisiert durch {@link System#nanoTime()}.
 	 */
-	public static final Zeitmesser NANOS  = new SystemNanosZeitmesser();
+	public static final Zeitmesser NANOS = System::nanoTime;
 	
 	private Zeitmesser myZeitmesser;
 	private long myStartNanos;
@@ -29,8 +31,8 @@ public class Timer {
 	}
 	
 	/**
-	 * Initialisiert einen neuen Timer dessen Genauigkeit von dem übergebenen
-	 * {@link Zeitmesser} festgelegt wird.
+	 * Initialisiert einen neuen Timer dessen Genauigkeit von dem übergebenen {@link Zeitmesser} festgelegt wird.
+	 * 
 	 * @param messer Der Zeitmesser
 	 * @see #NANOS
 	 * @see #MILLIS
@@ -48,11 +50,13 @@ public class Timer {
 	
 	/**
 	 * Nimmt die Zeit seit dem letzten {@link #start()} und gibt sie zurück.
-	 * <p>Aufeinander folgende Aufrufe von {@code stop()} erzeugen Werte die alle relativ
-	 * zu der genommenen Startzeit sind. Somit ist für jeden späteren Aufruf mehr Zeit 
-	 * vergangen, als für seinen Vorgänger.
-	 * <p>Falls gewünscht ist die Zeit zu messen die seit dem letzten {@code stop()}
-	 * vergangen ist, bietet sich {@link #stopAndRestart()} an.
+	 * <p>
+	 * Aufeinander folgende Aufrufe von {@code stop()} erzeugen Werte die alle relativ zu der genommenen Startzeit sind.
+	 * Somit ist für jeden späteren Aufruf mehr Zeit vergangen, als für seinen Vorgänger.
+	 * <p>
+	 * Falls gewünscht ist die Zeit zu messen die seit dem letzten {@code stop()} vergangen ist, bietet sich
+	 * {@link #stopAndRestart()} an.
+	 * 
 	 * @return Die Zeit seit dem letzten {@link #start()} in der über den Konstruktor vorgegebenen Genauigkeit
 	 */
 	public long stop() {
@@ -61,9 +65,10 @@ public class Timer {
 	
 	/**
 	 * Nimmt die Zeit seit dem letzten {@link #start()} und startet den Timer erneut.
-	 * <p>Aufeinander folgende Aufrufe von {@code stopAndRestart()} erzeugen Werte die
-	 * immer relativ zu einem vorherigen {@link #start()} oder {@code stopAndRestart()}
-	 * sind.
+	 * <p>
+	 * Aufeinander folgende Aufrufe von {@code stopAndRestart()} erzeugen Werte die immer relativ zu einem vorherigen
+	 * {@link #start()} oder {@code stopAndRestart()} sind.
+	 * 
 	 * @return Die Zeit seit dem letzten {@link #start()} in der über den Konstruktor vorgegebenen Genauigkeit
 	 */
 	public long stopAndRestart() {
@@ -79,22 +84,9 @@ public class Timer {
 	public interface Zeitmesser {
 		/**
 		 * Liefert die aktuelle Zeit als {@code long}.
+		 * 
 		 * @return Die aktuelle Zeit
 		 */
 		long missZeit();
-	}
-	
-	private static class SystemNanosZeitmesser implements Zeitmesser {
-		@Override
-		public long missZeit() {
-			return System.nanoTime();
-		}
-	}
-	
-	private static class SystemMillisZeitmesser implements Zeitmesser {
-		@Override
-		public long missZeit() {
-			return System.currentTimeMillis();
-		}
 	}
 }
