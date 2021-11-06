@@ -1,6 +1,6 @@
 package de.xancake.pattern.command;
 
-public interface Command_I {
+public interface Command {
 	void execute();
 	void getName();
 }

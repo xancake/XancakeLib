@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 /**
- * Eine Klasse die Listener in einer Liste verwaltet und sie über
- * {@link Event Ereignisse} informiert, die der
- * {@link #fireEvent(Event)}-Methode übergeben werden. 
+ * Eine Klasse die Listener in einer Liste verwaltet und sie über {@link Event Ereignisse} informiert, die der
+ * {@link #fireEvent(Event)}-Methode übergeben werden.
  * 
  * @param <L> Der Typ des konkreten Listeners der benachrichtigt werden soll
  */
@@ -16,11 +16,10 @@ public class EventDispatcher<L> {
 	private List<L> _listeners;
 	
 	/**
-	 * Instanziiert einen neuen EventDispatcher, an dem noch keine Listener
-	 * registriert sind.
+	 * Instanziiert einen neuen EventDispatcher, an dem noch keine Listener registriert sind.
 	 */
 	public EventDispatcher() {
-		this(new ArrayList<L>());
+		this(new ArrayList<>());
 	}
 	
 	protected EventDispatcher(List<L> listenerList) {
@@ -29,12 +28,11 @@ public class EventDispatcher<L> {
 	
 	/**
 	 * Fügt diesem EventDispatcher einen neuen Listener hinzu.
-	 * 
-	 * <p>Registrierte Listener werden bei Aufruf von {@link #fireEvent(Event)}
-	 * über das übergebene {@link Event Ereignis} benachrichtigt.
+	 * <p>
+	 * Registrierte Listener werden bei Aufruf von {@link #fireEvent(Event)} über das übergebene {@link Event Ereignis}
+	 * benachrichtigt.
 	 * 
 	 * @param listener Der hinzuzufügende Listener
-	 * 
 	 * @see #fireEvent(Event)
 	 */
 	public void addListener(L listener) {
@@ -43,12 +41,11 @@ public class EventDispatcher<L> {
 	
 	/**
 	 * Entfernt den übergebenen Listener von diesem EventDispatcher.
-	 * 
-	 * <p>Registrierte Listener werden bei Aufruf von {@link #fireEvent(Event)}
-	 * über das übergebene {@link Event Ereignis} benachrichtigt.
+	 * <p>
+	 * Registrierte Listener werden bei Aufruf von {@link #fireEvent(Event)} über das übergebene {@link Event Ereignis}
+	 * benachrichtigt.
 	 * 
 	 * @param listener Der zu entfernende Listener
-	 * 
 	 * @see #fireEvent(Event)
 	 */
 	public void removeListener(L listener) {
@@ -56,27 +53,24 @@ public class EventDispatcher<L> {
 	}
 	
 	/**
-	 * Gibt eine unmodifizierbare Kopie der Liste aller an diesem
-	 * EventDispatcher registrierten Listener zurück.
+	 * Gibt eine unmodifizierbare Kopie der Liste aller an diesem EventDispatcher registrierten Listener zurück.
 	 * 
-	 * @return Eine unmodifizierbare Kopie der Liste aller registrierten
-	 *         Listener
+	 * @return Eine unmodifizierbare Kopie der Liste aller registrierten Listener
 	 */
 	public List<L> getListeners() {
 		return Collections.unmodifiableList(_listeners);
 	}
 	
 	/**
-	 * Meldet das übergebene {@link Event Ereignis} an alle an diesem
-	 * EventDispatcher registrierten Listener.
+	 * Meldet das übergebene {@link Event Ereignis} an alle an diesem EventDispatcher registrierten Listener.
 	 * 
-	 * @param event Das zu meldende Ereignis
-	 * 
+	 * @param event    Das zu meldende Ereignis
+	 * @param delegate Die Methode am Listener, die zur Benachrichtigung aufgerufen werden soll
 	 * @see #getListeners()
 	 */
-	public void fireEvent(Event<? super L> event) {
+	public <E> void fireEvent(E event, BiConsumer<L, E> delegate) {
 		for(L l : _listeners) {
-			event.fireEvent(l);
+			delegate.accept(l, event);
 		}
 	}
 }

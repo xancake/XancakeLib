@@ -1,12 +1,7 @@
 package de.xancake.pattern.command.event;
 
-public class ClearHistoryEvent extends CommandHistoryEvent_A {
+public class ClearHistoryEvent extends AbstractCommandHistoryEvent {
 	public ClearHistoryEvent() {
 		super(null);
-	}
-	
-	@Override
-	public void fireEvent(CommandHistoryListener_I l) {
-		l.onClearHistory(this);
 	}
 }

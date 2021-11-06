@@ -1,14 +1,9 @@
 package de.xancake.pattern.command.event;
 
-import de.xancake.pattern.command.Command_I;
+import de.xancake.pattern.command.Command;
 
-public class UndoEvent extends CommandHistoryEvent_A {
-	public UndoEvent(Command_I command) {
+public class UndoEvent extends AbstractCommandHistoryEvent {
+	public UndoEvent(Command command) {
 		super(command);
-	}
-	
-	@Override
-	public void fireEvent(CommandHistoryListener_I l) {
-		l.onUndo(this);
 	}
 }
