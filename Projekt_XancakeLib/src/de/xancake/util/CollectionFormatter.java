@@ -17,22 +17,22 @@ public class CollectionFormatter<T> {
 	
 	private final Collection<T> _c;
 	
-	private String label = null;
+	private String _label = "";
 	
-	private boolean brackets = true;
-	private String bracketOpen = DEFAULT_BRACKET_OPEN;
-	private String bracketClose = DEFAULT_BRACKET_CLOSE;
+	private boolean _brackets = true;
+	private String _bracketOpen = DEFAULT_BRACKET_OPEN;
+	private String _bracketClose = DEFAULT_BRACKET_CLOSE;
 	
-	private String beforeEach = null;
-	private String afterEach = null;
+	private String _beforeEach = "";
+	private String _afterEach = "";
 	
-	private String separator = DEFAULT_SEPARATOR;
+	private String _separator = DEFAULT_SEPARATOR;
 	
-	private boolean breakLines;
-	private final String linebreakSymbol = System.lineSeparator();
+	private boolean _breakLines;
+	private final String _linebreakSymbol = System.lineSeparator();
 	
-	private boolean indent;
-	private String indentationSymbol = DEFAULT_INDENTATION;
+	private boolean _indent;
+	private String _indentationSymbol = DEFAULT_INDENTATION;
 	
 	@SuppressWarnings("unchecked")
 	private Function<T, String> _formatter = (Function<T, String>)DEFAULT_ELEMENT_FORMATTER;
@@ -46,81 +46,79 @@ public class CollectionFormatter<T> {
 	}
 	
 	public CollectionFormatter<T> noLabel() {
-		label = null;
-		return this;
+		return label("");
 	}
 	
 	public CollectionFormatter<T> label(String text) {
-		label = Objects.requireNonNull(text);
+		_label = Objects.requireNonNull(text);
 		return this;
 	}
 	
 	public CollectionFormatter<T> noBrackets() {
-		brackets = false;
+		_brackets = false;
 		return this;
 	}
 	
 	public CollectionFormatter<T> brackets() {
-		brackets = true;
+		_brackets = true;
 		return this;
 	}
 	
 	public CollectionFormatter<T> brackets(String open, String close) {
-		bracketOpen = Objects.requireNonNull(open);
-		bracketClose = Objects.requireNonNull(close);
+		_bracketOpen = Objects.requireNonNull(open);
+		_bracketClose = Objects.requireNonNull(close);
 		return brackets();
 	}
 	
 	public CollectionFormatter<T> noBeforeEach() {
-		return beforeEach(null);
+		return beforeEach("");
 	}
 	
 	public CollectionFormatter<T> beforeEach(String symbol) {
-		beforeEach = symbol;
+		_beforeEach = Objects.requireNonNull(symbol);
 		return this;
 	}
 	
 	public CollectionFormatter<T> noAfterEach() {
-		return afterEach(null);
+		return afterEach("");
 	}
 	
 	public CollectionFormatter<T> afterEach(String symbol) {
-		afterEach = symbol;
+		_afterEach = Objects.requireNonNull(symbol);
 		return this;
 	}
 	
 	public CollectionFormatter<T> noSeparator() {
-		separator = null;
-		return this;
+		return separator("");
 	}
 	
 	public CollectionFormatter<T> separator(String symbol) {
-		separator = Objects.requireNonNull(symbol);
+		_separator = Objects.requireNonNull(symbol);
 		return this;
 	}
 	
 	public CollectionFormatter<T> noLinebreak() {
-		breakLines = false;
+		_breakLines = false;
 		return this;
 	}
 	
 	public CollectionFormatter<T> linebreak() {
-		breakLines = true;
+		_breakLines = true;
 		return this;
 	}
 	
 	public CollectionFormatter<T> noIndent() {
-		indent = false;
+		_indent = false;
 		return this;
 	}
 	
 	public CollectionFormatter<T> indent() {
-		indent = true;
+		_indent = true;
 		return this;
 	}
 	
 	public CollectionFormatter<T> indent(String symbol) {
-		indentationSymbol = Objects.requireNonNull(symbol);
+		_indentationSymbol = Objects.requireNonNull(symbol);
 		return indent();
 	}
 	
@@ -131,12 +129,11 @@ public class CollectionFormatter<T> {
 	
 	@Override
 	public String toString() {
-		String beforeElement = (breakLines ? linebreakSymbol + (indent ? indentationSymbol : "") : "")
-			+ (beforeEach == null ? "" : beforeEach);
-		String afterElement = (afterEach == null ? "" : afterEach);
-		String delimiter = afterElement + (separator == null ? "" : separator) + beforeElement;
-		String prefix = (label == null ? "" : label + " ") + (brackets ? bracketOpen : "") + beforeElement;
-		String suffix = afterElement + (breakLines ? linebreakSymbol : "") + (brackets ? bracketClose : "");
+		String beforeElement = (_breakLines ? _linebreakSymbol + (_indent ? _indentationSymbol : "") : "") + _beforeEach;
+		String afterElement = _afterEach;
+		String delimiter = afterElement + _separator + beforeElement;
+		String prefix = _label + (_brackets ? _bracketOpen : "") + beforeElement;
+		String suffix = afterElement + (_breakLines ? _linebreakSymbol : "") + (_brackets ? _bracketClose : "");
 		return _c.stream().map(_formatter).collect(Collectors.joining(delimiter, prefix, suffix));
 	}
 	
